@@ -1,0 +1,32 @@
+POSTGRESQL
+- installerar posgresql
+- sätter upp pathen
+- loggar in
+psql -h 130.237.64.8 -U group2 -W spatial_db
+(lösen:marsvin)
+
+ladda ner node.js
+
+hur man skapar lösenord i posgresql
+https://www.meetspaceapp.com/2016/04/12/passwords-postgresql-pgcrypto.html
+SET CLIENT_ENCODING TO 'utf8';
+
+
+FUNGERAR:
+var Pool = require('pg').Pool;
+var config = {
+  host: '130.237.64.8',
+  user: 'group2',
+  password: 'marsvin',
+  database: 'spatial_db',
+  port: '5432'
+};
+
+var pool = new Pool(config);
+
+async function get_hits(){
+  var response = await pool.query("select * from usr");
+  console.log(response.rows[1].name, response.rows[1].password);
+}
+
+get_hits();
