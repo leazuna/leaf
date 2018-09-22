@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootstrap Elegant Modal Login Modal Form with Icons</title>
+<title>iNature - Welcome</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -97,26 +97,23 @@
   	<div class="modal-dialog modal-login">
   		<div class="modal-content">
   			<div class="modal-header">
-  				<h4 class="modal-title">Member Login</h4>
+  				<h4 class="modal-title">SIGN IN</h4>
   				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
   			</div>
   			<div class="modal-body">
-  				<form action="/action_page.php">
+  				<form action="/signin">
   					<div class="form-group">
   						<i class="fa fa-user"></i>
-  						<input type="text" class="form-control" placeholder="Username" name="uname" required="required">
+  						<input type="text" class="form-control" id ="username_in" placeholder="Username" name="uname" required="required">
   					</div>
   					<div class="form-group">
   						<i class="fa fa-lock"></i>
-  						<input type="password" class="form-control" placeholder="Password"  name="psw" required="required">
+  						<input type="password" class="form-control" id ="password_in" placeholder="Password"  name="psw" required="required">
   					</div>
   					<div class="form-group">
-  						<input type="button" id="inBtn" class="btn btn-primary btn-block btn-lg" value="Login" onClick="pasuser(this.form)">
+  						<input type="button" id="inBtn" class="btn btn-primary btn-block btn-lg" value="SIGN IN">
   					</div>
   				</form>
-  			</div>
-  			<div class="modal-footer">
-  				<a href="#">Forgot Password?</a>
   			</div>
   		</div>
   	</div>
@@ -137,28 +134,26 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
-				<form action="/action_page.php">
+				<form action="/signup">
 					<div class="form-group">
 						<i class="fa fa-user"></i>
-						<input type="text" class="form-control" id ="username" placeholder="Username" name="uname" required="required">
+						<input type="text" class="form-control" id ="username_up" placeholder="Username" name="uname" required="required">
 					</div>
 					<div class="form-group">
 						<i class="fa fa-lock"></i>
-						<input type="password" class="form-control" id ="password" placeholder="Password"  name="psw" required="required">
+						<input type="password" class="form-control" id ="password_up" placeholder="Password"  name="psw" required="required">
 					</div>
           <div class="form-group">
 						<i class="fa fa-lock"></i>
-						<input type="password" class="form-control" id="confpassword" placeholder="Confirm Password"  name="confPsw" required="required">
+						<input type="password" class="form-control" id="confpassword_up" placeholder="Confirm Password"  name="confPsw" required="required">
 					</div>
 					<div class="form-group">
-						<input type="button" id="upBtn"class="btn btn-primary btn-block btn-lg" value="Login">
+						<input type="button" id="upBtn"class="btn btn-primary btn-block btn-lg" value="SIGN UP">
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-
-<button id="button" >hej</button>
 <div id="bu"></div>
 <script src="./index.js"></script>
 </body>
