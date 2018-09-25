@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script src="jquery.js"></script>
+    
+    <script>
+    
+      function Add(n)
+    
+      {
+    
+          jQuery.ajax({
+    
+           type: "POST",
+    
+           url: "project.php",
+    
+           data: 'n='+n,
+    
+           cache: false,
+    
+           success: function(response)
+    
+           {
+    
+             alert("Record successfully updated");
+    
+           }
+    
+         });
+    
+     }
+    
+    </script>
+    
+    </head>
+    
+    <body>
+    
+    <input type="button" id="button_id" value="Update" onClick="n(1);">
+    
+    </body>
+    </html>
