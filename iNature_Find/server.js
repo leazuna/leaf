@@ -25,6 +25,22 @@ const pool = new Pool ({
 
 //Database connection functions----------------------------------------
 
+//Gets data from database
+app.get ('/coord', (req,res) => {
+  pool.query ('select * from coord', (err, dbResponse ) => {
+    if ( err) console.log (err);
+    //console.log (dbResponse.rows); // respons till servern
+    // here dbResponse is available , your data processing logic goes here
+    res.setHeader ('Access-Control-Allow-Origin', '*');
+    res.send (dbResponse.rows); //sänder som repons till klienten
+  });
+ });
+
+
+
+
+
+
 //Gets values from client and inserts to DB table 'coord'
 app.post ('/coord', (req , res) => { //req = from ajax,
   console.log ( req.body );
@@ -36,16 +52,7 @@ app.post ('/coord', (req , res) => { //req = from ajax,
   });
 });
 
-//Gets data from database
-app.get ('/coord', (req,res) => {
-  pool.query ('select * from coord', (err, dbResponse ) => {
-    if ( err) console.log (err);
-    console.log (dbResponse.rows); // respons till servern
-    // here dbResponse is available , your data processing logic goes here
-    res.setHeader ('Access-Control-Allow-Origin', '*');
-    res.send (dbResponse.rows); //sänder som repons till klienten
-  });
- });
+
 
  //Takase username, password and a random id as an in put and inserts it into DB
 app.post ('/signup', (req , res) => { //req = from ajax,
