@@ -21,7 +21,8 @@ var map = new Map({
   layers: [roads],
   view: new View({
     center: fromLonLat([18.160513,59.289951]),
-    zoom: 15
+    zoom: 15,
+    maxZoom: 19
   }),
 });
 
