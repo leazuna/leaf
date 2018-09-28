@@ -62,6 +62,10 @@
 
 <body>
 <div class="wrapper">
+<!--Icon+tooltip in upper menu - about -->
+<span data-toggle="tooltip" title="About">
+    <button type="button" class="btn menubtn" data-toggle="collapse" data-target="#AboutMenu"><span class="glyphicon glyphicon-tree-conifer"></span></button>
+</span>
     <!--Icon+tooltip in upper menu - layer -->
 <span data-toggle="tooltip" title="Layer">
     <button type="button" class="btn menubtn" data-toggle="collapse" data-target="#LayerMenu"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
@@ -70,16 +74,22 @@
 <span data-toggle="tooltip" title="Find">
     <button type="button" class="btn menubtn" data-toggle="collapse" data-target="#FindMenu"><span class="glyphicon glyphicon-search"></span></button>
 </span>
-    <!--Icon+tooltip in upper menu - home -->
-<span data-toggle="tooltip" title="iNature is a web and mobile application for hiking and exploring in the Nacka nature preserve">
-    <a type="button" class="btn menubtn" href="#"><span class="glyphicon glyphicon-tree-conifer"></span></a>
-</span>
     <!--Icon+tooltip in upper menu - sign in -->
 <span data-toggle="tooltip" title="Sign in">
     <a type="button" class="btn menubtn" href="./index.html"><i class="fas fa-user-check"></i></a>
 </span>
 </div>
 <hr style="margin: 0;">
+
+<!-- The fold-out menu from the about-icon-button - grid structure -->
+<div id="AboutMenu" class="collapse">
+        <div class="container">
+            <div class="row">
+                <h6 style="margin-left: 15px; color: #4a6300; text-align: center">iNature <span style="font-size: 0.875em; color:grey;">is a web and mobile application for hiking and exploring in the Nacka nature preserve!</span></h6>
+            </div>
+        </div>
+    </div>
+        <hr style="margin: 0;">
     <!-- The fold-out menu from the layer-icon-button - grid structure -->
 <div id="LayerMenu" class="collapse">
     <div class="container">
