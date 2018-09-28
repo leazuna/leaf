@@ -118,8 +118,18 @@
 .modal-title {
     color: #4A6300;
 }
-    </style>
+.btncustom:focus {
+  color: #4A6300;
+  background-color: white;
+  outline: none;
+}
+.btncustom:active {
+  color: #4A6300 !important;
+  background-color: white !important;
+}
+</style>
 </head>
+
 <body>
 <div class="jumbotron" >
     <div class="container" style="
@@ -135,11 +145,13 @@
         <br>
         <p>
         <!-- Sign in button/link-->
-        <a class="btn btn-primary btn-lg trigger-btn" href="#signIn" data-toggle="modal" role="button">Sign in »</a>
+        <!-- OBS!!!!! Just nu dirigeras man DIREKT till den inloggade sidan för att köra med inloggning skrev href="#signIn" -->
+        <a class="btn btn-primary btn-lg trigger-btn btncustom" href="./WEBGISProjectP3.html" data-toggle="modal" role="button">Sign in »</a>
         <!-- Sign up button/link-->
-        <a class="btn btn-primary btn-lg trigger-btn" href="#signUp" data-toggle="modal" role="button">Sign up »</a>
+        <!-- OBS!!!!! Just nu är denna knapp död för att köra sign up skrev href="#signUp" -->
+        <a class="btn btn-primary btn-lg trigger-btn btncustom" href="#" data-toggle="modal" role="button">Sign up »</a>
         <!-- To map button/link to HTML locally on computer-->
-        <a class="btn btn-primary btn-lg" href="./WEBGISProjectP2.html" role="button">To Map »</a></p>
+        <a class="btn btn-primary btn-lg btncustom" href="./WEBGISProjectP2.html" role="button">To Map »</a></p>
 	  </div>
 </div>
 
@@ -200,6 +212,6 @@
         </div>
     </div>
 </div>
-<script src="./index.js"></script>
+<script src="./SignInOut.js"></script>
 </body>
 </html>
