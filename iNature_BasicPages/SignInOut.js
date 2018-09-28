@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 //Insperation: https://stackoverflow.com/questions/48170329/how-to-add-marker-by-method-openlayers-4-angular-4
 //Kan få mer insperation från: https://openlayers.org/en/latest/examples/icon.html
 //Kanske: https://openlayers.org/en/latest/examples/reusable-source.html
