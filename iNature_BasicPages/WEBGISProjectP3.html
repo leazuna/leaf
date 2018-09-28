@@ -12,6 +12,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Import Awesome font -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <!-- Import google icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <style>
 #map {
     width: 100%; 
@@ -32,6 +34,9 @@
 .menubtn:hover {
     background-color: white;
     color: grey;
+}
+.menubtn:focus {
+  outline: none;
 }
 .layerbtn {
     background-color: white;
@@ -62,6 +67,15 @@
 
 <body>
 <div class="wrapper">
+<div class="wrapper">
+<!--Icon+tooltip in upper menu - show my position -->
+<span data-toggle="tooltip" title="Show my position">
+    <button id="showPos" type="button" class="btn menubtn"><i style="font-size: 15px;" class="material-icons">location_on</i></button>
+</span>
+<!--Icon+tooltip in upper menu - dont show my position -->
+<span data-toggle="tooltip" title="Hide my position">
+    <button id="hidePos" type="button" class="btn menubtn"><i style="font-size: 15px;" class="material-icons">location_off</i></button>
+</span>
 <!--Icon+tooltip in upper menu - about -->
 <span data-toggle="tooltip" title="About">
     <button type="button" class="btn menubtn" data-toggle="collapse" data-target="#AboutMenu"><span class="glyphicon glyphicon-tree-conifer"></span></button>
