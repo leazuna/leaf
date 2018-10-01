@@ -11,7 +11,8 @@ import {defaults as defaultControls, ZoomToExtent} from 'ol/control.js';
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom';
 import {LineString, Point} from 'ol/geom.js';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style.js';
-
+//-------------------------------------------------------------------------------------------------------------------------------------------
+//
 //-------------------------------------------------------------------- POINT & LAYER STYLES FOR VECTOR LAYERS
 //Defines marker style for the "my-position-marker" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
 var posStyle = new Style({
@@ -30,15 +31,15 @@ var posStyle = new Style({
   })
 });
 //Defiens marke style for My places/Create
-var markerStyle = new Style({
+var myPlaceStyle = new Style({
   image: new ol.style.Circle({
-    radius: 6,
+    radius: 10,
     stroke: new ol.style.Stroke({
       color: 'white',
       width: 2
     }),
     fill: new ol.style.Fill({
-        color:'rgba(32,178,170,0.65)'
+        color:'rgba(74,99,0,0.5)'
     })
   })
 });
@@ -61,13 +62,13 @@ var myPos = new VectorLayer({
   style: posStyle
 });
 
-//Creating vector layer to store position of 'My places'
-var markerSource = new VectorSource();
+//Creates an vector array to store positions of 'My places'
+var myPlaceArray = new VectorSource();
 
-//Creates vector layer containing markers for 'My places'
-var create = new VectorLayer({
-  source: markerSource,
-  style: markerStyle
+//Creates an vector layer containing vector array and styling for markers of 'My places'
+var myPlace = new VectorLayer({
+  source: myPlaceArray,
+  style: myPlaceStyle
 });
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -75,7 +76,7 @@ var create = new VectorLayer({
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
     target : 'map',
-    layers: [roads, myPos, create],
+    layers: [roads, myPos, myPlace],
     view: new View({
       center: fromLonLat([18.160513,59.289951]),
       zoom: 15,
@@ -121,38 +122,124 @@ function hideLocation() {
 }
 //Eventlistner listnening to the show/hide position, starting the functions
 var sp = document.getElementById("showPos");
-sp.addEventListener("click",geoFindMe);
+if (sp) {
+  sp.addEventListener("click",geoFindMe,false);
+}
 var hp = document.getElementById("hidePos");
-hp.addEventListener("click",hideLocation);
+if(hp) {
+  hp.addEventListener("click",hideLocation,false);
+}
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- CHANGE BACKGROUND MAP FUNCTIONS
 //Changes the map to satellite imagery
 var Satellite = document.getElementById("ChangeSatellite");
-Satellite.addEventListener("click", SatImg);
+if(Satellite){
+  Satellite.addEventListener("click", SatImg, false);
   function SatImg(){
     map.getLayers().removeAt(0);
     map.getLayers().insertAt(0, satellite);
   }
+}
 //Changes the map to regular road map
 var RegMap = document.getElementById("ChangeRoads");
-RegMap.addEventListener("click", RoadMap);
+if(RegMap) {
+  RegMap.addEventListener("click", RoadMap,false);
   function RoadMap(){
     map.getLayers().removeAt(0);
     map.getLayers().insertAt(0, roads);
   }
+}
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
-//-------------------------------------------------------------------- FUNCTIONS FOR CREATE (creat My position)
-//Creates a feature - a point
-function addMarker(lon, lat) {
-  var iconFeature = new Feature({
-  geometry: new Point(transform([lon, lat], 'EPSG:4326','EPSG:3857'))
+//-------------------------------------------------------------------- LOAD ALL FEATURES FROM THE DATABASE WHEN CLICKING ON button my 'My places'
+//Loads all "My places" for a specific user (user not handled yet)
+function loadMyPlaces(event) {
+  $.ajax({
+    url:'http://localhost:3000/myplaces',
+    type: 'GET',
+    success: function(res){
+      for (var i in res) {
+        //console.log(res[i].lon);
+        addMyPlaceMarker(res[i].lon, res[i].lat,res[i].place,res[i].descr);
+      }
+    }
   });
-  markerSource.addFeature(iconFeature);
+}
+//Controls the 'My place' (heart) button: if true (features not loaded), loads features - if false (features loaded), removes features
+var noFeatures = true;
+function showHideMyPlaces() {
+  if(noFeatures) {
+    loadMyPlaces();
+  }
+  else myPlaceArray.clear()
+  noFeatures  = !noFeatures;
+}
+//Triggers showHideMyPlaces function
+var triggMyPlaces = document.getElementById("myplaces");
+triggMyPlaces.addEventListener("click",showHideMyPlaces);
+//Changes heart-symbol depending on what state it has; if loaded features, then green, if not loaded features, then white
+$("#myplaces").click(function(event) {
+  $(this).find('i').toggleClass('fa fa-heart').toggleClass('far fa-heart');
+});
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- FUNCTIONS FOR POPPUPS of 'My places'
+//Defines a new pop up
+var element = document.getElementById('popup');
+var popup = new ol.Overlay({
+  element: element,
+  positioning: 'bottom-center',
+  stopEvent: false
+});
+//Adds popup to the map
+map.addOverlay(popup);
+//When clicking on a feature in the map, a popup with belonging information
+map.on('click', function(evt) {
+  var feature = map.forEachFeatureAtPixel(evt.pixel,
+    function(feature, layer) {
+      return feature;
+    });
+  if (feature) {
+    var geometry = feature.getGeometry();
+    var coord = geometry.getCoordinates();
+    popup.setPosition(coord);
+    $(element).popover({
+      'placement': 'top',
+      'html': true,
+      'title': feature.get('place'),
+      'content': feature.get('descr')
+    });
+    $(element).popover('show');
+  } else {
+    $(element).popover('destroy');
+  }
+});
+//Not used but may be used in the future - SAVE
+// // change mouse cursor when over marker
+// map.on('pointermove', function(e) {
+//   if (e.dragging) {
+//     $(element).popover('destroy');
+//     return;
+//   }
+//   var pixel = map.getEventPixel(e.originalEvent);
+//   var hit = map.hasFeatureAtPixel(pixel);
+//   //map.getTarget().style.cursor = hit ? 'pointer' : '';
+// });
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- FUNCTIONS FOR CREATE (My places)
+//Creates a feature when creating adding a new place to 'My places'
+function addMyPlaceMarker(lon, lat, place, descr) {
+  var iconFeature = new Feature({
+  geometry: new Point(transform([lon, lat], 'EPSG:4326','EPSG:3857')),
+  place: place,
+  descr: descr
+  });
+  myPlaceArray.addFeature(iconFeature);
 }
 //When single clicking: opens modal/popup form for Create-inputs (My position)
-var coord = []; //When clicking on the map, the coordinates gets stored in the array
+var coord = []; //When clicking on the map, coordinates gets stored in the array
 map.on('click',function(event){
   var GetCreate = document.getElementById("CreateBut");
   var create = GetCreate.getAttribute("aria-expanded");
@@ -162,7 +249,7 @@ map.on('click',function(event){
   if (create == 'true'){
     // $(document).ready(function() {
       $("#description").modal();
-      // Något som fungerade men men upprade funktioner - får sparas så länge
+      //Not used but may be used in the future - SAVE
       // $('#description').on('click', '.btn-primary', function(){
       //   place = $('#place').val();
       //   var descr = $('#descr').val();
@@ -174,17 +261,18 @@ map.on('click',function(event){
   }
   else {}
 });
-//When clicking on SAVE in modal/popup - calls the function storeDescr
+//Triggers function createMyPosition when clicking on button SAVE in modal/popup
 var save = document.getElementById("save");
-save.addEventListener("click",storeMyPosition);
-//Function; inserts longitude, latitude, name of 'My place' and 'Description' in database and
-//creates a marker on the map
-function storeMyPosition() {
+if(save) {
+  save.addEventListener("click",createMyPosition, false);
+}
+//Inserts longitude, latitude, name and description of 'My place' in database and creates a marker in the map
+function createMyPosition() {
   var lon = coord[0];
   var lat = coord[1];
   var place = document.getElementById('place').value;
   var descr = document.getElementById('descr').value;
-  addMarker(lon, lat);
+  addMyPlaceMarker(lon, lat, place, descr);
   if (place != "") {
     var request = $.ajax ({
       url: 'http://localhost:3000/create',

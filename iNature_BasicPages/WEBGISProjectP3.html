@@ -13,7 +13,7 @@
   <!-- Import Bootstrap -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <!-- Import Awesome font -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <!-- Import google icons -->
@@ -171,21 +171,37 @@
   color: #4A6300 !important;
   background-color: white !important;
 }
-.popover-content {
-  min-width: 180px;
+#popup {
+  padding-bottom: 10px;
+
+  min-width: 1000px;
+
 }
 #tree {
   position:relative;
-
 }
 #descr {
   size: 100%;
 }
-textarea {
+.textarea {
    resize: none;
    background-color: yellow;
+}
+
+.popover-content {
+  font-size: 9pt;
+  background-color: rgba(255,255,255,0.1);
+}
+.popover-title {
+  background-color:white;
+  color: rgba(74,99,0);
+  font-size: 11.5pt;
+}
+.fa-heart {
+  color: #4A6300;
 
 }
+
 </style>
 </head>
 <body>
@@ -288,7 +304,7 @@ textarea {
             <!-- The layer-menu alternatives regarding the user made point objects places - with icons and tooltips -->
             <div class="col-xs-2"><h6 style="color: #4a6300;">My places</h6>
                 <span data-toggle="tooltip" title="My places">
-                <a id="myplaces" type="button" class="layerbtn" href="#"><i class="far fa-heart"></i></a>
+                <a id="myplaces" type="button" class="layerbtn" href="#"><i class="far fa-heart" ></i></a>
                 </span>
             </div>
         </div>
@@ -429,6 +445,7 @@ textarea {
     </div>
 </div>
 <div id="map"></div>
+<div id="popup" data-style="primary" class=".popover-content .popover-title" data-toggle="popover" data-trigger="focus" ></div>
 <script type="text/javascript" src = "./OLmapJS.js"></script>
 </body>
 <!----------------- OLD CODE THAT WE MIGHT NEED TO GO BACK TO ------------------>
