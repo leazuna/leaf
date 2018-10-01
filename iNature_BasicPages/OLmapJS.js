@@ -1,4 +1,3 @@
-
 // Several imports enabling the function of the map, BingMap is specific for the satellite map
 import 'ol/ol.css';
 import {fromLonLat, toLonLat,transform} from 'ol/proj';
@@ -13,22 +12,26 @@ import DoubleClickZoom from 'ol/interaction/DoubleClickZoom';
 import {LineString, Point} from 'ol/geom.js';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style.js';
 
-//-------------------Handles the "my-position"-function and creating the map--------------------
-// Creating an array to store the position in, so that it can be removed later on
-var positionArray = new VectorSource();
-//Defines marker style for the 
+//-------------------------------------------------------------------- POINT & LAYER STYLES FOR VECTOR LAYERS
+//Defines marker style for the "my-position-marker" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
 var posStyle = new Style({
-  image: new ol.style.Circle({
-    radius: 6,
-    stroke: new ol.style.Stroke({
-      color: 'white',
-      width: 2
-    }),
+  text: new ol.style.Text({
+    text: '\uf3c5',
+    font: 'normal 20px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
     fill: new ol.style.Fill({
-        color:'rgba(32,178,170,0.65)'
+        color: 'black',
+    }),
+    stroke: new ol.style.Stroke({
+        color: 'black',
+        width: 1
     })
   })
 });
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- MAP & VECTOR LAYERS
 //Creates a base map - open street map
 var roads = new TileLayer({
   source: new OSM()
@@ -37,11 +40,16 @@ var roads = new TileLayer({
 var satellite = new TileLayer({
     source: new BingMaps({key: 'Av5H9QA0C4Tkx7t4ixpe2y39YvWcmCMzLBu3mJT-hU44U5z12GqTGd7KO-WF_S3V', imagerySet: 'Aerial'})
   });
+// Creating an array to store the position in, so that it can be removed later on
+var positionArray = new VectorSource();
 //Creates a vector layer for the location point
 var myPos = new VectorLayer({
   source: positionArray,
   style: posStyle
 });
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- DEFINING THE MAP AND IT´S VIEW AND LAYERS
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
     target : 'map',
@@ -51,6 +59,9 @@ var map = new Map({
       zoom: 15,
     }),
   });
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- FIND MY LOCATION FUNCTIONS
 //Adds the marker for my position and adds it to the vector array
 function addPositionMarker(lon, lat) {
   console.log('lon:', lon);
@@ -91,8 +102,9 @@ var sp = document.getElementById("showPos");
 sp.addEventListener("click",geoFindMe);
 var hp = document.getElementById("hidePos");
 hp.addEventListener("click",hideLocation);
+//-------------------------------------------------------------------------------------------------------------------------------------------
 
-//-------------------Handles the changing of the background map--------------------
+//-------------------------------------------------------------------- CHANGE BACKGROUND MAP FUNCTIONS
 //Changes the map to satellite imagery
 var Satellite = document.getElementById("ChangeSatellite");
 Satellite.addEventListener("click", SatImg);
@@ -107,3 +119,4 @@ RegMap.addEventListener("click", RoadMap);
     map.getLayers().removeAt(0);
     map.getLayers().insertAt(0, roads);
   }
+  //-------------------------------------------------------------------------------------------------------------------------------------------
