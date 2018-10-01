@@ -1,7 +1,7 @@
 // Several imports enabling the function of the map, BingMap is specific for the satellite map
 import 'ol/ol.css';
 import {fromLonLat, toLonLat,transform} from 'ol/proj';
-import {Map, View} from 'ol';
+import {Overlay, Map, View} from 'ol';
 import Draw from 'ol/interaction/Draw.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {BingMaps, OSM, Vector as VectorSource} from 'ol/source.js';
@@ -29,8 +29,21 @@ var posStyle = new Style({
     })
   })
 });
+//Defiens marke style for My places/Create
+var markerStyle = new Style({
+  image: new ol.style.Circle({
+    radius: 6,
+    stroke: new ol.style.Stroke({
+      color: 'white',
+      width: 2
+    }),
+    fill: new ol.style.Fill({
+        color:'rgba(32,178,170,0.65)'
+    })
+  })
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
-
+//
 //-------------------------------------------------------------------- MAP & VECTOR LAYERS
 //Creates a base map - open street map
 var roads = new TileLayer({
@@ -47,13 +60,22 @@ var myPos = new VectorLayer({
   source: positionArray,
   style: posStyle
 });
+
+//Creating vector layer to store position of 'My places'
+var markerSource = new VectorSource();
+
+//Creates vector layer containing markers for 'My places'
+var create = new VectorLayer({
+  source: markerSource,
+  style: markerStyle
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- DEFINING THE MAP AND IT´S VIEW AND LAYERS
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
     target : 'map',
-    layers: [roads, myPos],
+    layers: [roads, myPos, create],
     view: new View({
       center: fromLonLat([18.160513,59.289951]),
       zoom: 15,
@@ -119,4 +141,68 @@ RegMap.addEventListener("click", RoadMap);
     map.getLayers().removeAt(0);
     map.getLayers().insertAt(0, roads);
   }
-  //-------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- FUNCTIONS FOR CREATE (creat My position)
+//Creates a feature - a point
+function addMarker(lon, lat) {
+  var iconFeature = new Feature({
+  geometry: new Point(transform([lon, lat], 'EPSG:4326','EPSG:3857'))
+  });
+  markerSource.addFeature(iconFeature);
+}
+//When single clicking: opens modal/popup form for Create-inputs (My position)
+var coord = []; //When clicking on the map, the coordinates gets stored in the array
+map.on('click',function(event){
+  var GetCreate = document.getElementById("CreateBut");
+  var create = GetCreate.getAttribute("aria-expanded");
+  var lonLat = toLonLat(event.coordinate);
+  coord.push(lonLat[0]);
+  coord.push(lonLat[1]);
+  if (create == 'true'){
+    // $(document).ready(function() {
+      $("#description").modal();
+      // Något som fungerade men men upprade funktioner - får sparas så länge
+      // $('#description').on('click', '.btn-primary', function(){
+      //   place = $('#place').val();
+      //   var descr = $('#descr').val();
+      //   //$(".modal-body input").val("")
+      //   //console.log(place);
+      //   //console.log(descr);
+      // $("#description.close").click()
+      // });
+  }
+  else {}
+});
+//When clicking on SAVE in modal/popup - calls the function storeDescr
+var save = document.getElementById("save");
+save.addEventListener("click",storeMyPosition);
+//Function; inserts longitude, latitude, name of 'My place' and 'Description' in database and
+//creates a marker on the map
+function storeMyPosition() {
+  var lon = coord[0];
+  var lat = coord[1];
+  var place = document.getElementById('place').value;
+  var descr = document.getElementById('descr').value;
+  addMarker(lon, lat);
+  if (place != "") {
+    var request = $.ajax ({
+      url: 'http://localhost:3000/create',
+      type: "POST",
+      cache: true ,
+      contentType: "application/json",
+      data: JSON.stringify ({ //req body
+        lon: lon,
+        lat: lat,
+        place: place,
+        descr: descr
+      })
+    });
+    $('.form-control').val("")
+    $("#description .close").click()
+    coord = [];
+  }
+  else {
+    alert("Please, give your place a name!");
+  }
+}

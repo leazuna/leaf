@@ -48,6 +48,28 @@ app.post ('/signup', (req , res) => { //req = from ajax,
   });
 });
 
+//Gets values from client and inserts to DB table 'coord'
+app.post ('/create', (req , res) => { //req = from ajax,
+  console.log ( req.body );
+   // data you send from your application is available on req.body object , your data processing logic goes here
+  pool.query (`INSERT INTO myplaces VALUES ('${req.body.lon}', '${req.body.lat}', '${req.body.place}', '${req.body.descr}') RETURNING *`, function (err , dbResponse ) {
+    if ( err) console.log ( err);
+    res.setHeader ('Access-Control-Allow-Origin', '*');
+    res.send (dbResponse); //sends to client
+  });
+});
+
+//Gets data from database
+app.get ('/create', (req,res) => {
+  pool.query ('select * from coord', (err, dbResponse ) => {
+    if ( err) console.log (err);
+    console.log (dbResponse.rows); // respons till servern
+    // here dbResponse is available , your data processing logic goes here
+    res.setHeader ('Access-Control-Allow-Origin', '*');
+    res.send (dbResponse.rows); //sÃ¤nder som repons till klienten
+  });
+ });
+
 app.listen (3000 , () => console.log('Example app listening on port 3000!'));
 
 

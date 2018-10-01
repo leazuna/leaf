@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>iNature Signed In</title>
-    <!-- Import OpenLayer -->
-        <link rel="stylesheet" href="https://openlayers.org/en/v5.2.0/css/ol.css" type="text/css">
-    <!-- Import Bootstrap -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- Import Awesome font -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <!-- Import google icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <!-- Import for OpenLayer and vector-functions -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://openlayers.org/en/v4.6.4/build/ol-debug.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://openlayers.org/en/v5.2.0/css/ol.css" type="text/css">
-
+  <meta charset="utf-8">
+  <title>iNature Signed In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Import OpenLayer -->
+  <link rel="stylesheet" href="https://openlayers.org/en/v5.2.0/css/ol.css" type="text/css">
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+  <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <!-- Import Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+  <!-- Import Awesome font -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <!-- Import google icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://openlayers.org/en/v4.6.4/build/ol-debug.js"></script>
 <style>
 #map {
-    width: 100%; 
-    height: 100%; 
+    width: 100%;
+    height: 100%;
     position: fixed;
 }
 .wrapper {
@@ -71,9 +67,127 @@
     font-size: 12px;
     margin-left: 20px;
 }
+
+.btn-primary {
+    color: #fff;
+    background-color: transparent;
+    border-color: white;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.btn-primary:hover {
+    color: #4A6300;
+    background-color: white;
+    border-color: white;
+}
+.modal-login {
+  	color: #636363;
+  	width: 350px;
+}
+.modal-login .modal-content {
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+}
+.modal-login .modal-header {
+  	border-bottom: none;
+  	position: relative;
+  	justify-content: center;
+}
+.modal-login h4 {
+  	text-align: center;
+  	font-size: 26px;
+}
+.modal-login  .form-group {
+  	position: relative;
+}
+.modal-login i {
+  	position: absolute;
+  	left: 13px;
+  	top: 11px;
+  	font-size: 18px;
+}
+.modal-login .form-control {
+  	padding-left: 40px;
+    background-color: white;
+}
+.modal-login .form-control:focus {
+  	border-color: #4A6300;
+    box-shadow: none;
+}
+.btn-primary.focus, .btn-primary:focus {
+  color: #4A6300;
+  background-color: white;
+  border-color: white;
+}
+.modal-login .form-control, .modal-login .btn {
+  	min-height: 40px;
+  	border-radius: 3px;
+}
+.modal-login .hint-text {
+  	text-align: center;
+  	padding-top: 10px;
+}
+.modal-login .close {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.modal-login .btn {
+    background: white;
+    color: #4A6300;
+    margin-bottom: 5px;
+    border-color: #4A6300;
+}
+.modal-login .btn:hover, .modal-login .btn:focus {
+    background: #4A6300;
+    opacity: 0.8;
+    color: white;
+}
+.modal-login .modal-footer {
+    background: #ecf0f1;
+    border-color: #dee4e7;
+    text-align: center;
+    margin: 0 -20px -20px;
+    border-radius: 5px;
+    font-size: 13px;
+    justify-content: center;
+}
+.modal-login .modal-footer a {
+    color: #999;
+}
+.trigger-btn {
+    display: inline-block;
+}
+.modal-title {
+    color: #4A6300;
+}
+.btncustom:focus {
+  color: #4A6300;
+  background-color: white;
+  outline: none;
+}
+.btncustom:active {
+  color: #4A6300 !important;
+  background-color: white !important;
+}
+.popover-content {
+  min-width: 180px;
+}
+#tree {
+  position:relative;
+
+}
+#descr {
+  size: 100%;
+}
+textarea {
+   resize: none;
+   background-color: yellow;
+
+}
 </style>
 </head>
-
 <body>
 <div class="wrapper">
 <!--Icon+tooltip in upper menu - show my position -->
@@ -98,7 +212,7 @@
 </span>
     <!--Icon+tooltip in upper menu - create -->
 <span data-toggle="tooltip" title="Create">
-    <button type="button" class="btn menubtn" data-toggle="collapse" data-target="#CreateMenu"><span class="glyphicon glyphicon-edit"></span></button>
+    <button type="button" id="CreateBut" class="btn menubtn" data-toggle="collapse" data-target="#CreateMenu"><span class="glyphicon glyphicon-edit"></span></button>
 </span>
     <!--Icon+tooltip in upper menu - sign out -->
 <span data-toggle="tooltip" title="Sign out">
@@ -255,7 +369,7 @@
                         <p id="whitepurple" style="color: purple" class="findbtn"><i class="fas fa-map-signs"></i></p>
                     </span>
                 </label>
-            <!-- The find-menu alternatives regarding where there search will be initiated - klick in map will be needed -->    
+            <!-- The find-menu alternatives regarding where there search will be initiated - klick in map will be needed -->
             </div>
             <div class="col-xs-3">
                 <h6 style="color: #4a6300;">From where are you searching?</h6>
@@ -269,7 +383,7 @@
                     <p id="aLine" class="findbtn">A road or trail</p>
                 </label>
             </div>
-            <!-- The find-menu alternatives performing the search -->  
+            <!-- The find-menu alternatives performing the search -->
             <div class="col-xs-2">
                 <br>
                 <br>
@@ -288,15 +402,37 @@
         </div>
 </div>
 <hr style="margin: 0;">
-
-<div id="map"></div>
-<script type="text/javascript" src = "./OLmapJS.js"></script> 
+<!--Modal/Popup for My position/Create - takes inputs -->
+<div id="description" class="modal" >
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="modal-header" style="font-size: 24px;">
+                <h4 class="modal-title"><i id="tree" class="fa fa-tree" style="font-size:30px"></i></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="/create">
+                    <div class="form-group">
+                        <i class="fa fa-map-marker-alt"></i>
+                        <input type="text" class="form-control" id ="place" placeholder="My place" name="place" required="required">
+                    </div>
+                    <div class="form-group">
+                      <i class="glyphicon glyphicon-edit" style="font-size:17px"></i>
+                      <textarea class="form-control" rows="4" maxlength="120" value="" id ="descr" placeholder="Description" name="descr" required="required"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" id="save"class="btn btn-primary btn-block btn-lg" value="SAVE">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
+<div id="map"></div>
+<script type="text/javascript" src = "./OLmapJS.js"></script>
 </body>
-
 <!----------------- OLD CODE THAT WE MIGHT NEED TO GO BACK TO ------------------>
 <!-- Fun map function from https://openlayers.org/en/latest/examples/layer-spy.html
     <div id="map" class="map"></div>
-    <script>src="./LayerSpyOL.js"</script> 
+    <script>src="./LayerSpyOL.js"</script>
 BING-API-KEY: Av5H9QA0C4Tkx7t4ixpe2y39YvWcmCMzLBu3mJT-hU44U5z12GqTGd7KO-WF_S3V-->
