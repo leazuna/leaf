@@ -26,7 +26,7 @@ const pool = new Pool ({
 //-------------------------------------------------------------------- SIGN IN, SIGN UP
 //Takes username and password as input and checks if it is in the DB, if yes - returns user id, elsewhere returns false -- Used by function 'signin'
 app.post ('/signin', (req,res) => {
-  pool.query (`select case when '${req.body.uname}' in (select name from usr) and '${req.body.psw}' in (select password from usr) then (select id from usr where name = '${req.body.uname}' and password = '${req.body.psw}' )
+  pool.query (`select case when '${req.body.uname}' in (select name from usr) and '${req.body.psw}' in (select password from usr) then (select name from usr where name = '${req.body.uname}')
   else 'false' end`, (err, dbResponse ) => {
     if ( err)  console.log (err);
     console.log (dbResponse); // respons till servern
@@ -37,7 +37,7 @@ app.post ('/signin', (req,res) => {
  });
 //Updates table 'signedin' with the current signed in user, used in funtion signin
  app.post ('/setuser', (req,res) => {
-   pool.query (`UPDATE signedin SET usrid = '${req.body.usrid}' WHERE usrid is not null`, (err, dbResponse ) => {
+   pool.query (`UPDATE signedin SET usrid = '${req.body.user}' WHERE usrid is not null`, (err, dbResponse ) => {
      if ( err)  console.log (err);
      console.log (dbResponse); // respons till servern
      // here dbResponse is available , your data processing logic goes here
@@ -48,7 +48,7 @@ app.post ('/signin', (req,res) => {
 
 //Takes username, password and a random id as an in put and inserts it into DB (usr table) -- Used by function 'signout'
 app.post ('/signup', (req , res) => { //req = from ajax,
-  pool.query (`INSERT INTO usr VALUES ('${req.body.uname}', '${req.body.psw}', '${req.body.id}')`, function (err , dbResponse ) {
+  pool.query (`INSERT INTO usr VALUES ('${req.body.uname}', '${req.body.psw}')`, function (err , dbResponse ) {
     if ( err) {
       res.send (err.name);
     }

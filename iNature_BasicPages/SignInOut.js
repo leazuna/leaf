@@ -24,7 +24,7 @@
           cache: false ,
           contentType: "application/json",
           data: JSON.stringify ({ //req body
-            usrid: answ
+            user: answ
           }),
         });
         window.location.href = "./WEBGISProjectP3.html";
@@ -41,8 +41,6 @@
    var uname = document.getElementById('username_up').value;
    var psw= document.getElementById('password_up').value;
    var confPsw = document.getElementById('confpassword_up').value;
-   var randStr = require('randomstring');
-   var yourString = randStr.generate(8);
    if (confPsw==psw && psw!="" && confPsw!="") {
      var request = $.ajax ({
        url: 'http://localhost:3000/signup',
@@ -51,8 +49,7 @@
        contentType: "application/json",
        data: JSON.stringify ({ //req body
          uname: uname,
-         psw: psw,
-         id: yourString
+         psw: psw
        }),
        success: function(res){
          console.log(res)
