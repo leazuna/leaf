@@ -318,14 +318,14 @@
                 <!-- The find-menu alternative where the search distance is chosen -->
                 <div class="col-xs-2">
                     <div class="form-group">
-                        <label for="dist"><h6 style="margin-left: 15px; color: #4a6300;">Distance:</h6></label>
-                        <input type="number" class="form-control" id="dist" value=0>
+                        <label for="dist"><h6 style="margin-left: 15px; color: #4a6300;">Distance [km]</h6></label>
+                        <input type="number" class="form-control" id="dist" value=1>
                     </div>
                 </div>
                 <!-- The find-menu alternatives regarding the what to search for - radiobuttons with icons and tooltips -->
                 <div class="col-xs-5">
                 <h6 style="margin-left: 15px; color: #4a6300;">What are you searching for?</h6>
-                <label class="radio-inline"><input value="bathSite" type="radio" name="SearchChoice">
+                <label class="radio-inline"><input value="bathSite" type="radio" name="SearchChoice" checked>
                     <span data-toggle="tooltip" title="Bathing sites">
                         <p id="bathingsites" class="findbtn"><i class="far fa-life-ring"></i></p>
                     </span>
@@ -389,13 +389,13 @@
             </div>
             <div class="col-xs-3">
                 <h6 style="color: #4a6300;">From where are you searching?</h6>
-                <label class="radio"><input value="fromGPSlocation" type="radio" name="SearchInit">
+                <label class="radio"><input value="fromGPSlocation" type="radio" name="SearchInit" checked>
                     <p id="GPSlocation" class="findbtn">My position</p>
                 </label>
-                <label class="radio"><input value="fromGPSlocation" type="radio" name="SearchInit">
+                <label class="radio"><input value="fromClick" type="radio" name="SearchInit">
                     <p id="aPlace" class="findbtn">A place</p>
                 </label>
-                <label class="radio"><input value="fromGPSlocation" type="radio" name="SearchInit">
+                <label class="radio"><input value="fromTrail" type="radio" name="SearchInit">
                     <p id="aLine" class="findbtn">A road or trail</p>
                 </label>
             </div>

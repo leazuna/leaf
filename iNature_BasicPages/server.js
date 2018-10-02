@@ -1,4 +1,5 @@
-//Given code to be used
+//-------------------------------------------------------------------- SERVER CONNECTIONS
+//Server iNature
 const express = require ('express');
 const app = express ();
 const bodyParser = require ('body-parser');
@@ -10,6 +11,7 @@ app.use ( function (req , res , next ) {
   next ();
 });
 app.use(bodyParser.urlencoded({ extended: true }));
+
 //Node-postgres: connection to database
 const { Pool } = require ('pg');
 const pool = new Pool ({
@@ -19,6 +21,9 @@ const pool = new Pool ({
   password: 'marsvin',
   port: 5432 ,
 });
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- SIGN IN, SIGN UP
 //Takes username and password as input and checks if it is in the DB, if yes - returns user id, elsewhere returns false -- Used by function 'signin'
 app.post ('/signin', (req,res) => {
   pool.query (`select case when '${req.body.uname}' in (select name from usr) and '${req.body.psw}' in (select password from usr) then (select id from usr where name = '${req.body.uname}' and password = '${req.body.psw}' )
@@ -43,6 +48,9 @@ app.post ('/signup', (req , res) => { //req = from ajax,
     }
   });
 });
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- CREATE
 //Gets all My-places-positions and its beloning information for a specific user - Used by function 'loadMyPlaces'
 app.get ('/myplaces', (req,res) => {
   pool.query ('select * from myplaces', (err, dbResponse ) => {
@@ -63,7 +71,58 @@ app.post ('/create', (req , res) => { //req = from ajax,
     res.send (dbResponse); //sends to client
   });
 });
+//-------------------------------------------------------------------------------------------------------------------------------------------
 
+//-------------------------------------------------------------------- LAYER & FIND
+//TEST - KAN RADERAS NÄR KLAR - Gets point data from test_wgs84_point
+app.get('/test_wgs84_point', (req, res) => {
+  pool.query('SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "test_wgs84_point"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//TEST - KAN RADERAS NÄR KLAR - Gets line data as GeoJson from test_wgs84_line
+app.get('test_wgs84_line', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(geom) FROM "test_wgs84_linje"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets point data from w_bathmade (Bathing Sites)
+app.get('/w_bathmade', (req, res) => {
+  pool.query('SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "w_bathmade"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets point data from w_natural (Natural Bathing Sites)
+app.get('/w_bathnatural', (req, res) => {
+  pool.query('SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "w_bathnatural"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets point data from w_viewpoint (Viewpoints)
+app.get('/w_viewpoint', (req, res) => {
+  pool.query('SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "w_viewpoint"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets point data from w_nicespots (Hidden Gems)
+app.get('/w_nicespots', (req, res) => {
+  pool.query('SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "w_nicespots"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//-------------------------------------------------------------------------------------------------------------------------------------------
 app.listen (3000 , () => console.log('Example app listening on port 3000!'));
 
 

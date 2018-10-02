@@ -1,16 +1,16 @@
 // Several imports enabling the function of the map, BingMap is specific for the satellite map
 import 'ol/ol.css';
-import {fromLonLat, toLonLat,transform} from 'ol/proj';
-import {Overlay, Map, View} from 'ol';
+import { fromLonLat, toLonLat, transform } from 'ol/proj';
+import { Overlay, Map, View } from 'ol';
 import Draw from 'ol/interaction/Draw.js';
-import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
-import {BingMaps, OSM, Vector as VectorSource} from 'ol/source.js';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer.js';
+import { BingMaps, OSM, Vector as VectorSource } from 'ol/source.js';
 import * as style from 'ol/style';
 import Feature from 'ol/Feature';
-import {defaults as defaultControls, ZoomToExtent} from 'ol/control.js';
+import { defaults as defaultControls, ZoomToExtent } from 'ol/control.js';
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom';
-import {LineString, Point} from 'ol/geom.js';
-import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style.js';
+import { LineString, Point } from 'ol/geom.js';
+import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------- POINT & LAYER STYLES FOR VECTOR LAYERS
@@ -22,11 +22,107 @@ var posStyle = new Style({
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-        color: 'black',
+      color: 'black',
     }),
     stroke: new ol.style.Stroke({
-        color: 'black',
-        width: 1
+      color: 'black',
+      width: 1
+    })
+  })
+});
+//Defines marker style for the "bathing sites" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+var bathingSiteStyle = new Style({
+  text: new ol.style.Text({
+    text: '\uf3c5',
+    font: 'normal 20px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'black',
+      width: 1
+    })
+  })
+});
+//Defines marker style for the "natural bathing sites" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+var naturalBathingSiteStyle = new Style({
+  text: new ol.style.Text({
+    text: '\uf3c5',
+    font: 'normal 20px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'black',
+      width: 1
+    })
+  })
+});
+//Defines marker style for the "viewpoints" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+var viewPointsStyle = new Style({
+  text: new ol.style.Text({
+    text: '\uf3c5',
+    font: 'normal 20px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'black',
+      width: 1
+    })
+  })
+});
+//Defines marker style for the "Hidden Gems" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+var gemsStyle = new Style({
+  text: new ol.style.Text({
+    text: '\uf3c5',
+    font: 'normal 20px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'black',
+      width: 1
+    })
+  })
+});
+//Defines marker style for the "clicked point" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+var clickedStyle = new Style({
+  text: new ol.style.Text({
+    text: '\uf3c5',
+    font: 'normal 20px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'black',
+      width: 1
+    })
+  })
+});
+//Defines marker style for the "search result" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+var searchResultStyle = new Style({
+  text: new ol.style.Text({
+    text: '\uf3c5',
+    font: 'normal 20px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'black',
+      width: 1
     })
   })
 });
@@ -39,7 +135,7 @@ var myPlaceStyle = new Style({
       width: 2
     }),
     fill: new ol.style.Fill({
-        color:'rgba(74,99,0,0.5)'
+      color: 'rgba(74,99,0,0.5)'
     })
   })
 });
@@ -50,10 +146,12 @@ var myPlaceStyle = new Style({
 var roads = new TileLayer({
   source: new OSM()
 });
+
 //Creates a satellite map - open street layer
 var satellite = new TileLayer({
-    source: new BingMaps({key: 'Av5H9QA0C4Tkx7t4ixpe2y39YvWcmCMzLBu3mJT-hU44U5z12GqTGd7KO-WF_S3V', imagerySet: 'Aerial'})
-  });
+  source: new BingMaps({ key: 'Av5H9QA0C4Tkx7t4ixpe2y39YvWcmCMzLBu3mJT-hU44U5z12GqTGd7KO-WF_S3V', imagerySet: 'Aerial' })
+});
+
 // Creating an array to store the position in, so that it can be removed later on
 var positionArray = new VectorSource();
 //Creates a vector layer for the location point
@@ -61,10 +159,50 @@ var myPos = new VectorLayer({
   source: positionArray,
   style: posStyle
 });
-
+// Creating an array to store the bathing site position in, so that it can be removed later on
+var bathingSiteArray = new VectorSource();
+//Creates a vector layer for the location point
+var bathingSitePos = new VectorLayer({
+  source: bathingSiteArray,
+  style: bathingSiteStyle
+});
+// Creating an array to store the natural bathing site position in, so that it can be removed later on
+var naturalBathingSiteArray = new VectorSource();
+//Creates a vector layer for the location point
+var naturalBathingSitePos = new VectorLayer({
+  source: naturalBathingSiteArray,
+  style: naturalBathingSiteStyle
+});
+// Creating an array to store the viewpoints position in, so that it can be removed later on
+var viewPointsArray = new VectorSource();
+//Creates a vector layer for the location point
+var viewPointsPos = new VectorLayer({
+  source: viewPointsArray,
+  style: viewPointsStyle
+});
+// Creating an array to store the viewpoints position in, so that it can be removed later on
+var gemsArray = new VectorSource();
+//Creates a vector layer for the location point
+var gemsPos = new VectorLayer({
+  source: gemsArray,
+  style: gemsStyle
+});
+// Creating an array to store the viewpoints position in, so that it can be removed later on
+var clickedArray = new VectorSource();
+//Creates a vector layer for the location point
+var clickedPos = new VectorLayer({
+  source: clickedArray,
+  style: clickedStyle
+});
+// Creating an array to store the search results position in, so that it can be removed later on
+var searchResultArray = new VectorSource();
+//Creates a vector layer for the location point
+var searchResultPos = new VectorLayer({
+  source: searchResultArray,
+  style: searchResultStyle
+});
 //Creates an vector array to store positions of 'My places'
 var myPlaceArray = new VectorSource();
-
 //Creates an vector layer containing vector array and styling for markers of 'My places'
 var myPlace = new VectorLayer({
   source: myPlaceArray,
@@ -75,45 +213,53 @@ var myPlace = new VectorLayer({
 //-------------------------------------------------------------------- DEFINING THE MAP AND IT´S VIEW AND LAYERS
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
-    target : 'map',
-    layers: [roads, myPos, myPlace],
-    view: new View({
-      center: fromLonLat([18.160513,59.289951]),
-      zoom: 15,
-    }),
-  });
+  target: 'map',
+  layers: [roads, myPos, myPlace, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos],
+  view: new View({
+    center: fromLonLat([18.160513, 59.289951]),
+    zoom: 15,
+  }),
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- FIND MY LOCATION FUNCTIONS
 //Adds the marker for my position and adds it to the vector array
-function addPositionMarker(lon, lat) {
+function addPositionMarker(lon, lat, targetArray) {
   console.log('lon:', lon);
   console.log('lat:', lat);
   var iconFeature = new Feature({
-  geometry: new Point(transform([lon, lat], 'EPSG:4326','EPSG:3857'))
+    geometry: new Point(transform([lon, lat], 'EPSG:4326', 'EPSG:3857'))
   });
-  positionArray.addFeature(iconFeature);
+  if (targetArray === "myPos") {
+    positionArray.addFeature(iconFeature);
+  }
+  else if (targetArray === "clickedArray") {
+    clickedArray.addFeature(iconFeature);
+  }
+  else if (targetArray === "searchResult") {
+    searchResultArray.addFeature(iconFeature);
+  }
 }
 //Removes previous marker, collects long, lat and runs the addPositionMarker function as well as zooms to the position, at 2 zoom levels higher than what was started at
 function geoFindMe() {
-  if (!navigator.geolocation){
+  if (!navigator.geolocation) {
     output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
     return;
   }
   function success(position) {
     positionArray.clear()
-    var latitude  = position.coords.latitude;
+    var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
     if (position.coords.accuracy < 200) {
-      addPositionMarker(longitude, latitude); //Creates marker in map using lon & lat
+      addPositionMarker(longitude, latitude, "myPos"); //Creates marker in map using lon & lat
       map.setView(new View({
-        center: fromLonLat([longitude,latitude]),
+        center: fromLonLat([longitude, latitude]),
         zoom: 17
       }))
     }
-    else {}
+    else { }
   }
-  function error() {}
+  function error() { }
   navigator.geolocation.getCurrentPosition(success, error);
 }
 //Function for removing the marker when pressing "hide my location"
@@ -123,45 +269,45 @@ function hideLocation() {
 //Eventlistner listnening to the show/hide position, starting the functions
 var sp = document.getElementById("showPos");
 if (sp) {
-  sp.addEventListener("click",geoFindMe,false);
+  sp.addEventListener("click", geoFindMe, false);
 }
 var hp = document.getElementById("hidePos");
-if(hp) {
-  hp.addEventListener("click",hideLocation,false);
+if (hp) {
+  hp.addEventListener("click", hideLocation, false);
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- CHANGE BACKGROUND MAP FUNCTIONS
 //Changes the map to satellite imagery
 var Satellite = document.getElementById("ChangeSatellite");
-if(Satellite){
+if (Satellite) {
   Satellite.addEventListener("click", SatImg, false);
-  function SatImg(){
+  function SatImg() {
     map.getLayers().removeAt(0);
     map.getLayers().insertAt(0, satellite);
   }
 }
 //Changes the map to regular road map
 var RegMap = document.getElementById("ChangeRoads");
-if(RegMap) {
-  RegMap.addEventListener("click", RoadMap,false);
-  function RoadMap(){
+if (RegMap) {
+  RegMap.addEventListener("click", RoadMap, false);
+  function RoadMap() {
     map.getLayers().removeAt(0);
     map.getLayers().insertAt(0, roads);
   }
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
-//-------------------------------------------------------------------- LOAD ALL FEATURES FROM THE DATABASE WHEN CLICKING ON button my 'My places'
+//-------------------------------------------------------------------- LOAD ALL FEATURES FROM myPlaces THE DATABASE WHEN CLICKING ON BUTTON 'My places'
 //Loads all "My places" for a specific user (user not handled yet)
 function loadMyPlaces(event) {
   $.ajax({
-    url:'http://localhost:3000/myplaces',
+    url: 'http://localhost:3000/myplaces',
     type: 'GET',
-    success: function(res){
+    success: function (res) {
       for (var i in res) {
         //console.log(res[i].lon);
-        addMyPlaceMarker(res[i].lon, res[i].lat,res[i].place,res[i].descr);
+        addMyPlaceMarker(res[i].lon, res[i].lat, res[i].place, res[i].descr);
       }
     }
   });
@@ -169,22 +315,22 @@ function loadMyPlaces(event) {
 //Controls the 'My place' (heart) button: if true (features not loaded), loads features - if false (features loaded), removes features
 var noFeatures = true;
 function showHideMyPlaces() {
-  if(noFeatures) {
+  if (noFeatures) {
     loadMyPlaces();
   }
   else myPlaceArray.clear()
-  noFeatures  = !noFeatures;
+  noFeatures = !noFeatures;
 }
 //Triggers showHideMyPlaces function
 var triggMyPlaces = document.getElementById("myplaces");
-triggMyPlaces.addEventListener("click",showHideMyPlaces);
+triggMyPlaces.addEventListener("click", showHideMyPlaces);
 //Changes heart-symbol depending on what state it has; if loaded features, then green, if not loaded features, then white
-$("#myplaces").click(function(event) {
+$("#myplaces").click(function (event) {
   $(this).find('i').toggleClass('fa fa-heart').toggleClass('far fa-heart');
 });
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
-//-------------------------------------------------------------------- FUNCTIONS FOR POPPUPS of 'My places'
+//-------------------------------------------------------------------- FUNCTIONS FOR POPPUPS OF 'My places'
 //Defines a new pop up
 var element = document.getElementById('popup');
 var popup = new ol.Overlay({
@@ -195,9 +341,9 @@ var popup = new ol.Overlay({
 //Adds popup to the map
 map.addOverlay(popup);
 //When clicking on a feature in the map, a popup with belonging information
-map.on('click', function(evt) {
+map.on('click', function (evt) {
   var feature = map.forEachFeatureAtPixel(evt.pixel,
-    function(feature, layer) {
+    function (feature, layer) {
       return feature;
     });
   if (feature) {
@@ -232,39 +378,39 @@ map.on('click', function(evt) {
 //Creates a feature when creating adding a new place to 'My places'
 function addMyPlaceMarker(lon, lat, place, descr) {
   var iconFeature = new Feature({
-  geometry: new Point(transform([lon, lat], 'EPSG:4326','EPSG:3857')),
-  place: place,
-  descr: descr
+    geometry: new Point(transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
+    place: place,
+    descr: descr
   });
   myPlaceArray.addFeature(iconFeature);
 }
 //When single clicking: opens modal/popup form for Create-inputs (My position)
 var coord = []; //When clicking on the map, coordinates gets stored in the array
-map.on('click',function(event){
+map.on('click', function (event) {
   var GetCreate = document.getElementById("CreateBut");
   var create = GetCreate.getAttribute("aria-expanded");
   var lonLat = toLonLat(event.coordinate);
   coord.push(lonLat[0]);
   coord.push(lonLat[1]);
-  if (create == 'true'){
+  if (create == 'true') {
     // $(document).ready(function() {
-      $("#description").modal();
-      //Not used but may be used in the future - SAVE
-      // $('#description').on('click', '.btn-primary', function(){
-      //   place = $('#place').val();
-      //   var descr = $('#descr').val();
-      //   //$(".modal-body input").val("")
-      //   //console.log(place);
-      //   //console.log(descr);
-      // $("#description.close").click()
-      // });
+    $("#description").modal();
+    //Not used but may be used in the future - SAVE
+    // $('#description').on('click', '.btn-primary', function(){
+    //   place = $('#place').val();
+    //   var descr = $('#descr').val();
+    //   //$(".modal-body input").val("")
+    //   //console.log(place);
+    //   //console.log(descr);
+    // $("#description.close").click()
+    // });
   }
-  else {}
+  else { }
 });
 //Triggers function createMyPosition when clicking on button SAVE in modal/popup
 var save = document.getElementById("save");
-if(save) {
-  save.addEventListener("click",createMyPosition, false);
+if (save) {
+  save.addEventListener("click", createMyPosition, false);
 }
 //Inserts longitude, latitude, name and description of 'My place' in database and creates a marker in the map
 function createMyPosition() {
@@ -274,12 +420,12 @@ function createMyPosition() {
   var descr = document.getElementById('descr').value;
   addMyPlaceMarker(lon, lat, place, descr);
   if (place != "") {
-    var request = $.ajax ({
+    var request = $.ajax({
       url: 'http://localhost:3000/create',
       type: "POST",
-      cache: true ,
+      cache: true,
       contentType: "application/json",
-      data: JSON.stringify ({ //req body
+      data: JSON.stringify({ //req body
         lon: lon,
         lat: lat,
         place: place,
@@ -293,4 +439,138 @@ function createMyPosition() {
   else {
     alert("Please, give your place a name!");
   }
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- FUNCTIONS FOR FIND
+//Declaring global variables and default values
+var findFromPos = false;
+var findFromPoint = true;
+var findFromTrail = false;
+var latitude;
+var longitude;
+var clickcoordinate = [18.160513, 59.289951];
+var urlend = "/w_bathmade";
+
+var searchclickpoint = document.getElementById("StartSearch");
+searchclickpoint.addEventListener("click", function () { findpoints() });
+/* Inte implementerat ännu
+var target;
+if (target === point) {
+    var searchclickpoint = document.getElementById("StartSearch");
+    searchclickpoint.addEventListener("click", function () { findpoints(urlend) });
+}
+else if (target === line) {
+    var searchclickline = document.getElementById("StartSearch");
+    searchclickline.addEventListener("click", function () { findlines(urlend) });
+}
+*/
+
+map.on('singleclick', function (evt) {
+  clickcoordinate = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'); //map.getEventCoordinate(evt.originalEvent)
+});
+
+function findpoints() {
+  if ($("input[name='SearchInit']:checked").val() == "fromGPSlocation") {
+    findFromPos = true;
+    findFromPoint = false;
+    findFromTrail = false;
+  }
+  else if ($("input[name='SearchInit']:checked").val() == "fromClick") {
+    findFromPos = false;
+    findFromPoint = true;
+    findFromTrail = false;
+  }
+  /* Inte implementerat ännu
+  else if ($("input[name='SearchInit']:checked").val() == "fromTrail") {
+    findFromPos = false;
+    findFromPoint = false;
+    findFromTrail = true;
+  }*/
+  if ($("input[name='SearchChoice']:checked").val() == "bathSite") {
+    urlend = "/w_bathmade";
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "NaturBathSite") {
+    urlend = "/w_bathnatural";
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "View") {
+    urlend = "/w_viewpoint";
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "Gems") {
+    urlend = "/w_nicespots";
+  }
+  $.ajax({
+    url: 'http://localhost:3000' + urlend,
+    type: 'GET',
+
+    success: function (res) {
+      console.log(res);
+      if (findFromPos) {
+        console.log('find from position');
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(success, error);
+          function success(position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            createfoundpoints(latitude, longitude, "myPos");
+          }
+          function error() {
+            //Does nothing
+          }
+        }
+      }
+      else if (findFromPoint) {
+        console.log('find from point');
+        latitude = clickcoordinate[1];
+        longitude = clickcoordinate[0];
+        console.log(latitude, longitude)
+        createfoundpoints(latitude, longitude, "clickedArray");
+      }
+      //Not working yet
+      else if (findFromTrail) {
+        console.log('find from trail');
+        //Do something
+      }
+
+      function createfoundpoints(latitude, longitude, fromArray) {
+        searchResultArray.clear();
+        clickedArray.clear();
+        positionArray.clear();
+        addPositionMarker(longitude, latitude, fromArray);
+        for (var i in res) {
+          console.log(latitude, longitude, res[i].latitude, res[i].longitude);
+          //console.log(distance(latitude, longitude, res[i].lat, res[i].lon, "K"));
+          if (distance(latitude, longitude, res[i].latitude, res[i].longitude, "K") < document.getElementById("dist").value) {
+            //Point within distance! Yeey
+            console.log('Point within distance Yeey!');
+            addPositionMarker(res[i].longitude, res[i].latitude, "searchResult");
+          }
+        }
+        //console.log(lat, lon);
+        map.setView(new View({
+          center: fromLonLat([longitude, latitude]),
+          zoom: 14
+        }))
+      }
+
+    }
+  });
+}
+function distance(lat1, lon1, lat2, lon2, unit) {
+  //console.log(lat1);
+  var radlat1 = Math.PI * lat1 / 180;
+  var radlat2 = Math.PI * lat2 / 180;
+  var theta = lon1 - lon2;
+  var radtheta = Math.PI * theta / 180;
+  var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  //console.log(dist);
+  if (dist > 1) {
+      dist = 1;
+  }
+  dist = Math.acos(dist);
+  dist = dist * 180 / Math.PI;
+  dist = dist * 60 * 1.1515;
+  if (unit == "K") { dist = dist * 1.609344 };
+  if (unit == "N") { dist = dist * 0.8684 };
+  return dist
 }
