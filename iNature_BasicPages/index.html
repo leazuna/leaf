@@ -127,6 +127,9 @@
   color: #4A6300 !important;
   background-color: white !important;
 }
+#tree {
+  position:relative;
+}
 </style>
 </head>
 
@@ -146,10 +149,10 @@
         <p>
         <!-- Sign in button/link-->
         <!-- OBS!!!!! Just nu dirigeras man DIREKT till den inloggade sidan för att köra med inloggning skrev href="#signIn" -->
-        <a class="btn btn-primary btn-lg trigger-btn btncustom" href="./WEBGISProjectP3.html" data-toggle="modal" role="button">Sign in »</a>
+        <a class="btn btn-primary btn-lg trigger-btn btncustom" href="#signIn" data-toggle="modal" role="button">Sign in »</a>
         <!-- Sign up button/link-->
         <!-- OBS!!!!! Just nu är denna knapp död för att köra sign up skrev href="#signUp" -->
-        <a class="btn btn-primary btn-lg trigger-btn btncustom" href="#" data-toggle="modal" role="button">Sign up »</a>
+        <a class="btn btn-primary btn-lg trigger-btn btncustom" href="#signUp" data-toggle="modal" role="button">Sign up »</a>
         <!-- To map button/link to HTML locally on computer-->
         <a class="btn btn-primary btn-lg btncustom" href="./WEBGISProjectP2.html" role="button">To Map »</a></p>
 	  </div>
@@ -159,7 +162,7 @@
     <div class="modal-dialog modal-login">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">SIGN IN</h4>
+              <h4 class="modal-title"><i id="tree" class="fa fa-tree" style="font-size:30px"></i></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
@@ -187,7 +190,7 @@
     <div class="modal-dialog modal-login">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">SIGN UP</h4>
+              <h4 class="modal-title"><i id="tree" class="fa fa-tree" style="font-size:30px"></i></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">

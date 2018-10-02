@@ -574,3 +574,20 @@ function distance(lat1, lon1, lat2, lon2, unit) {
   if (unit == "N") { dist = dist * 0.8684 };
   return dist
 }
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- FUNCTIONS FOR SIGN OUT USER
+//Signs out the current user
+function signOutUsr () {
+  var request = $.ajax({
+    url: 'http://localhost:3000/signoutusr',
+    type: "POST",
+    cache: true,
+    contentType: "application/json"
+  });
+}
+//Triggers signOutUsr when clicking on Sign out
+var sou = document.getElementById("signoutusr");
+if (sou) {
+  sou.addEventListener("click", signOutUsr, false);
+}
