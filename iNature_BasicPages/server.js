@@ -26,7 +26,7 @@ const pool = new Pool ({
 //-------------------------------------------------------------------- SIGN IN, SIGN UP
 //Takes username and password as input and checks if it is in the DB, if yes - returns user id, elsewhere returns false -- Used by function 'signin'
 app.post ('/signin', (req,res) => {
-  pool.query (`select case when '${req.body.uname}' in (select name from usr) and '${req.body.psw}' in (select password from usr) then (select id from usr where name = '${req.body.uname}' and password = '${req.body.psw}' )
+  pool.query (`select case when '${req.body.uname}' in (select name from usr) and '${req.body.psw}' in (select password from usr) then (select name from usr where name = '${req.body.uname}')
   else 'false' end`, (err, dbResponse ) => {
     if ( err)  console.log (err);
     console.log (dbResponse); // respons till servern
@@ -35,10 +35,20 @@ app.post ('/signin', (req,res) => {
     res.send (dbResponse); //sänder som repons till klienten
   });
  });
+//Updates table 'signedin' with the current signed in user, used in funtion signin
+ app.post ('/setuser', (req,res) => {
+   pool.query (`UPDATE signedin SET usrid = '${req.body.user}' WHERE usrid is not null`, (err, dbResponse ) => {
+     if ( err)  console.log (err);
+     console.log (dbResponse); // respons till servern
+     // here dbResponse is available , your data processing logic goes here
+     res.setHeader ('Access-Control-Allow-Origin', '*');
+     res.send (dbResponse); //sänder som repons till klienten
+   });
+  });
 
 //Takes username, password and a random id as an in put and inserts it into DB (usr table) -- Used by function 'signout'
 app.post ('/signup', (req , res) => { //req = from ajax,
-  pool.query (`INSERT INTO usr VALUES ('${req.body.uname}', '${req.body.psw}', '${req.body.id}')`, function (err , dbResponse ) {
+  pool.query (`INSERT INTO usr VALUES ('${req.body.uname}', '${req.body.psw}')`, function (err , dbResponse ) {
     if ( err) {
       res.send (err.name);
     }
@@ -53,7 +63,7 @@ app.post ('/signup', (req , res) => { //req = from ajax,
 //-------------------------------------------------------------------- CREATE
 //Gets all My-places-positions and its beloning information for a specific user - Used by function 'loadMyPlaces'
 app.get ('/myplaces', (req,res) => {
-  pool.query ('select * from myplaces', (err, dbResponse ) => {
+  pool.query ('select * from myplaces where usrid = (select * from signedin)', (err, dbResponse ) => {
     if ( err) console.log (err);
     console.log (dbResponse.rows); // respons till servern
     // here dbResponse is available , your data processing logic goes here
@@ -65,7 +75,7 @@ app.get ('/myplaces', (req,res) => {
 app.post ('/create', (req , res) => { //req = from ajax,
   console.log ( req.body );
    // data you send from your application is available on req.body object , your data processing logic goes here
-  pool.query (`INSERT INTO myplaces VALUES ('${req.body.lon}', '${req.body.lat}', '${req.body.place}', '${req.body.descr}') RETURNING *`, function (err , dbResponse ) {
+  pool.query (`INSERT INTO myplaces VALUES ('${req.body.lon}', '${req.body.lat}', '${req.body.place}', '${req.body.descr}', (select * from signedin))`, function (err , dbResponse ) {
     if ( err) console.log ( err);
     res.setHeader ('Access-Control-Allow-Origin', '*');
     res.send (dbResponse); //sends to client
@@ -120,6 +130,19 @@ app.get('/w_nicespots', (req, res) => {
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- SIGN OUT USER
+//Updates signedin table with 'none'
+app.post ('/signoutusr', (req , res) => { //req = from ajax,
+  console.log ( req.body );
+   // data you send from your application is available on req.body object , your data processing logic goes here
+  pool.query (`UPDATE signedin SET usrid = 'none' WHERE usrid is not null`, function (err , dbResponse ) {
+    if ( err) console.log ( err);
+    res.setHeader ('Access-Control-Allow-Origin', '*');
+    res.send (dbResponse); //sends to client
   });
 });
 //-------------------------------------------------------------------------------------------------------------------------------------------
