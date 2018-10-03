@@ -250,13 +250,12 @@ function geoFindMe() {
     positionArray.clear()
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
-    if (position.coords.accuracy < 200) {
-      addPositionMarker(longitude, latitude, "myPos"); //Creates marker in map using lon & lat
-      map.setView(new View({
-        center: fromLonLat([longitude, latitude]),
-        zoom: 17
-      }))
-    }
+    addPositionMarker(longitude, latitude, "myPos"); //Creates marker in map using lon & lat
+    map.setView(new View({
+      center: fromLonLat([longitude, latitude]),
+      zoom: 17
+    }))
+  
     else { }
   }
   function error() { }
@@ -565,7 +564,7 @@ function distance(lat1, lon1, lat2, lon2, unit) {
   var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
   //console.log(dist);
   if (dist > 1) {
-      dist = 1;
+    dist = 1;
   }
   dist = Math.acos(dist);
   dist = dist * 180 / Math.PI;
