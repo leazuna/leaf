@@ -16,6 +16,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <!-- Import Awesome font -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Import google icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script src="https://openlayers.org/en/v4.6.4/build/ol-debug.js"></script>
@@ -83,7 +84,7 @@
                 <a id="bathingsites" type="button" class="layerbtn" href="#"><i class="far fa-life-ring"></i></a>
                 </span>
                 <span data-toggle="tooltip" title="Natural bathing sites">
-                <a id="naturalbath" type="button" class="layerbtn" href="#"><i class="fas fa-swimmer"></i></a>
+                <a id="naturalbath" type="button" class="layerbtn" href="#"><i class="fa fa-tint"></i></a>
                 </span>
                 <span data-toggle="tooltip" title="Viewpoints">
                 <a id="viewpoints" type="button" class="layerbtn" href="#"><i class="fas fa-binoculars"></i></a>
@@ -150,7 +151,7 @@
                 </label>
                 <label class="radio-inline"><input value="NaturBathSite" type="radio" name="SearchChoice">
                     <span data-toggle="tooltip" title="Natural bathing sites">
-                        <p id="naturalbath" class="findbtn"><i class="fas fa-swimmer"></i></p>
+                        <p id="naturalbath" class="findbtn"><i class="fa fa-tint"></i></p>
                     </span>
                 </label>
                 <label class="radio-inline"><input value="View" type="radio" name="SearchChoice">
@@ -207,10 +208,10 @@
             </div>
             <div class="col-xs-3">
                 <h6 style="color: #4a6300;">From where are you searching?</h6>
-                <label class="radio"><input value="fromGPSlocation" type="radio" name="SearchInit" checked>
+                <label class="radio"><input value="fromGPSlocation" type="radio" name="SearchInit">
                     <p id="GPSlocation" class="findbtn">My position</p>
                 </label>
-                <label class="radio"><input value="fromClick" type="radio" name="SearchInit">
+                <label class="radio"><input value="fromClick" type="radio" name="SearchInit" checked>
                     <p id="aPlace" class="findbtn">A place</p>
                 </label>
                 <label class="radio"><input value="fromTrail" type="radio" name="SearchInit">
@@ -247,7 +248,7 @@
             <div class="modal-body">
                 <form action="/create">
                     <div class="form-group">
-                        <i class="fa fa-map-marker-alt"></i>
+                        <i class="fas fa-map-marker-alt"></i>
                         <input type="text" class="form-control" id ="place" placeholder="My place" name="place" required="required">
                     </div>
                     <div class="form-group">

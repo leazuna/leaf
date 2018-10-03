@@ -14,128 +14,131 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------- POINT & LAYER STYLES FOR VECTOR LAYERS
-//Defines marker style for the "my-position-marker" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+//Defines marker style for the "my-position-marker"
 var posStyle = new Style({
   text: new ol.style.Text({
-    text: '\uf3c5',
+    text: '\uf041',
     font: 'normal 20px FontAwesome',
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'black',
+      color: '#4a6300',
     }),
     stroke: new ol.style.Stroke({
-      color: 'black',
+      color: '#4a6300',
       width: 1
     })
   })
 });
-//Defines marker style for the "bathing sites" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+//Defines marker style for the "bathing sites"
 var bathingSiteStyle = new Style({
   text: new ol.style.Text({
-    text: '\uf3c5',
-    font: 'normal 20px FontAwesome',
+    text: '\uf1cd',
+    font: 'normal 17px FontAwesome',
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'black',
+      color: '#4a6300',
     }),
     stroke: new ol.style.Stroke({
-      color: 'black',
+      color: '#4a6300',
       width: 1
     })
   })
 });
-//Defines marker style for the "natural bathing sites" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+//Defines marker style for the "natural bathing sites"
 var naturalBathingSiteStyle = new Style({
   text: new ol.style.Text({
-    text: '\uf3c5',
-    font: 'normal 20px FontAwesome',
+    text: '\uf043',
+    font: 'normal 17px FontAwesome',
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'black',
+      color: '#4a6300',
     }),
     stroke: new ol.style.Stroke({
-      color: 'black',
+      color: '#4a6300',
       width: 1
     })
   })
 });
-//Defines marker style for the "viewpoints" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+//Defines marker style for the "viewpoints"
 var viewPointsStyle = new Style({
   text: new ol.style.Text({
-    text: '\uf3c5',
-    font: 'normal 20px FontAwesome',
+    text: '\uf1e5',
+    font: 'normal 17px FontAwesome',
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'black',
+      color: '#4a6300',
     }),
     stroke: new ol.style.Stroke({
-      color: 'black',
+      color: '#4a6300',
       width: 1
     })
   })
 });
-//Defines marker style for the "Hidden Gems" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+//Defines marker style for the "Hidden Gems"
 var gemsStyle = new Style({
   text: new ol.style.Text({
-    text: '\uf3c5',
-    font: 'normal 20px FontAwesome',
+    text: '\uf219',
+    font: 'normal 17px FontAwesome',
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'black',
+      color: '#4a6300',
     }),
     stroke: new ol.style.Stroke({
-      color: 'black',
+      color: '#4a6300',
       width: 1
     })
   })
 });
-//Defines marker style for the "clicked point" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+//Defines marker style for the "clicked point"
 var clickedStyle = new Style({
   text: new ol.style.Text({
-    text: '\uf3c5',
-    font: 'normal 20px FontAwesome',
+    text: '\uf276',
+    font: 'normal 17px FontAwesome',
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'black',
+      color: '#4a6300',
     }),
     stroke: new ol.style.Stroke({
-      color: 'black',
+      color: '#4a6300',
       width: 1
     })
   })
 });
-//Defines marker style for the "search result" - fungerar inte med nuvarande version av importen. skiljer för alla olika ikoner. behöver kollas upp.
+//Defines marker style for the "search result"
 var searchResultStyle = new Style({
   text: new ol.style.Text({
-    text: '\uf3c5',
-    font: 'normal 20px FontAwesome',
+    text: '\uf006',
+    font: 'normal 17px FontAwesome',
     textAlign: 'center',
     textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'black',
+      color: '#4a6300',
     }),
     stroke: new ol.style.Stroke({
-      color: 'black',
+      color: '#4a6300',
       width: 1
     })
   })
 });
 //Defiens marke style for My places/Create
 var myPlaceStyle = new Style({
-  image: new ol.style.Circle({
-    radius: 10,
-    stroke: new ol.style.Stroke({
-      color: 'white',
-      width: 2
-    }),
+  text: new ol.style.Text({
+    text: '\uf004',
+    font: 'normal 17px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
     fill: new ol.style.Fill({
-      color: 'rgba(74,99,0,0.5)'
+      color: '#4a6300',
+    }),
+    stroke: new ol.style.Stroke({
+      color: '#4a6300',
+      width: 1
     })
   })
 });
