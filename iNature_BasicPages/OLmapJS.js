@@ -255,8 +255,6 @@ function geoFindMe() {
       center: fromLonLat([longitude, latitude]),
       zoom: 17
     }))
-  
-    else { }
   }
   function error() { }
   navigator.geolocation.getCurrentPosition(success, error);
