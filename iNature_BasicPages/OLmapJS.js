@@ -142,6 +142,22 @@ var myPlaceStyle = new Style({
     })
   })
 });
+//Defiens marke style for My places/Create
+var otherUsersPlaceStyle = new Style({
+  text: new ol.style.Text({
+    text: '\uf192',
+    font: 'normal 17px FontAwesome',
+    textAlign: 'center',
+    textBaseline: 'bottom',
+    fill: new ol.style.Fill({
+      color: '#4a6300',
+    }),
+    stroke: new ol.style.Stroke({
+      color: '#4a6300',
+      width: 1
+    })
+  })
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------- MAP & VECTOR LAYERS
@@ -211,13 +227,20 @@ var myPlace = new VectorLayer({
   source: myPlaceArray,
   style: myPlaceStyle
 });
+//Creates an vector array to store positions of 'My places'
+var otherUsersPlaceArray = new VectorSource();
+//Creates an vector layer containing vector array and styling for markers of 'My places'
+var otherUsersPlace = new VectorLayer({
+  source: otherUsersPlaceArray,
+  style: otherUsersPlaceStyle
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- DEFINING THE MAP AND IT´S VIEW AND LAYERS
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
   target: 'map',
-  layers: [roads, myPos, myPlace, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos],
+  layers: [roads, myPos, myPlace, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos, otherUsersPlace],
   view: new View({
     center: fromLonLat([18.160513, 59.289951]),
     zoom: 15,
