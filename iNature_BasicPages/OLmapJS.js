@@ -158,6 +158,12 @@ var otherUsersPlaceStyle = new Style({
     })
   })
 });
+var largeTrailStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'red',
+    width: 1
+  })
+})
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------- MAP & VECTOR LAYERS
@@ -199,14 +205,14 @@ var viewPointsPos = new VectorLayer({
   source: viewPointsArray,
   style: viewPointsStyle
 });
-// Creating an array to store the viewpoints position in, so that it can be removed later on
+// Creating an array to store the gems position in, so that it can be removed later on
 var gemsArray = new VectorSource();
 //Creates a vector layer for the location point
 var gemsPos = new VectorLayer({
   source: gemsArray,
   style: gemsStyle
 });
-// Creating an array to store the viewpoints position in, so that it can be removed later on
+// Creating an array to store the clicked position in, so that it can be removed later on
 var clickedArray = new VectorSource();
 //Creates a vector layer for the location point
 var clickedPos = new VectorLayer({
@@ -234,13 +240,20 @@ var otherUsersPlace = new VectorLayer({
   source: otherUsersPlaceArray,
   style: otherUsersPlaceStyle
 });
+//Creates an vector array to store line objects in, so that it can be removed later on
+var largeTrailArray = new VectorSource({});
+//Creates a vector layer for the create line
+var largeTrail = new VectorLayer({
+  source: largeTrailArray,
+  style: largeTrailStyle
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- DEFINING THE MAP AND IT´S VIEW AND LAYERS
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
   target: 'map',
-  layers: [roads, myPos, myPlace, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos, otherUsersPlace],
+  layers: [roads, largeTrail, myPos, myPlace, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos, otherUsersPlace],
   view: new View({
     center: fromLonLat([18.160513, 59.289951]),
     zoom: 15,
@@ -467,88 +480,105 @@ function createMyPosition() {
 
 //-------------------------------------------------------------------- FUNCTIONS FOR FIND
 //Declaring global variables and default values
-var findFromPos = false;
-var findFromPoint = true;
-var findFromTrail = false;
+//var findFromPos = false;
+//var findFromPoint = true;
+//var findFromTrail = false;
 var latitude;
 var longitude;
 var clickcoordinate = [18.160513, 59.289951];
 var urlend = "/w_bathmade";
+var target = "point";
 
 var searchclickpoint = document.getElementById("StartSearch");
 searchclickpoint.addEventListener("click", function () { findpoints() });
-/* Inte implementerat ännu
-var target;
-if (target === point) {
-    var searchclickpoint = document.getElementById("StartSearch");
-    searchclickpoint.addEventListener("click", function () { findpoints(urlend) });
-}
-else if (target === line) {
-    var searchclickline = document.getElementById("StartSearch");
-    searchclickline.addEventListener("click", function () { findlines(urlend) });
-}
-*/
+
 
 map.on('singleclick', function (evt) {
   clickcoordinate = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'); //map.getEventCoordinate(evt.originalEvent)
 });
 
 function findpoints() {
+
   if ($("input[name='SearchInit']:checked").val() == "fromGPSlocation") {
-    findFromPos = true;
-    findFromPoint = false;
-    findFromTrail = false;
+    var findFromPos = true;
+    var findFromPoint = false;
+    var findFromTrail = false;
   }
   else if ($("input[name='SearchInit']:checked").val() == "fromClick") {
-    findFromPos = false;
-    findFromPoint = true;
-    findFromTrail = false;
+    var findFromPos = false;
+    var findFromPoint = true;
+    var findFromTrail = false;
   }
   /* Inte implementerat ännu
   else if ($("input[name='SearchInit']:checked").val() == "fromTrail") {
     findFromPos = false;
     findFromPoint = false;
     findFromTrail = true;
-  }*/
+}*/
   if ($("input[name='SearchChoice']:checked").val() == "bathSite") {
     urlend = "/w_bathmade";
+    target = "point";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "NaturBathSite") {
     urlend = "/w_bathnatural";
+    target = "point";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "View") {
     urlend = "/w_viewpoint";
+    target = "point";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Gems") {
     urlend = "/w_nicespots";
+    target = "point";
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "LargeTrail") {
+    urlend = "/test_wgs84_line";
+    target = "line";
   }
   $.ajax({
     url: 'http://localhost:3000' + urlend,
     type: 'GET',
 
     success: function (res) {
-      console.log(res);
+
+      console.log(findFromPos, target, urlend, res);
       if (findFromPos) {
         console.log('find from position');
+
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(success, error);
           function success(position) {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            createfoundpoints(latitude, longitude, "myPos");
+            if (target === "point") {
+              createfoundpoints(latitude, longitude, "myPos");
+            }
+            else if (target === "line") {
+              createfoundlines(latitude, longitude, "myPos");
+            }
           }
           function error() {
             //Does nothing
           }
         }
+
+
       }
       else if (findFromPoint) {
-        console.log('find from point');
-        latitude = clickcoordinate[1];
-        longitude = clickcoordinate[0];
-        console.log(latitude, longitude)
-        createfoundpoints(latitude, longitude, "clickedArray");
+        if (target === "point") {
+          console.log('find from point');
+          latitude = clickcoordinate[1];
+          longitude = clickcoordinate[0];
+          console.log(latitude, longitude)
+          createfoundpoints(latitude, longitude, "clickedArray");
+        }
+        else if (target === "line") {
+          //Do something
+
+        }
+
       }
+
       //Not working yet
       else if (findFromTrail) {
         console.log('find from trail');
@@ -570,6 +600,32 @@ function findpoints() {
           }
         }
         //console.log(lat, lon);
+        map.setView(new View({
+          center: fromLonLat([longitude, latitude]),
+          zoom: 14
+        }))
+      }
+      function createfoundlines(latitude, longitude, fromArray) {
+        searchResultArray.clear();
+        clickedArray.clear();
+        positionArray.clear();
+        addPositionMarker(longitude, latitude, fromArray);
+        var list_Feat = jsonAnswerDataToListElements(res);
+        var line_data = {
+          "type": "FeatureCollection",
+          //"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
+          "features": list_Feat
+        }
+        largeTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, {featureProjection: 'EPSG: 4326' }))
+        /*console.log(positionArray.features);
+        console.log(positionArray.geometry, line_data.features[1].geometry.distanceTo(pointFeature.geometry), document.getElementById("dist").value);
+        for (var i = 1; i <= line_data.features.length - 1; i++) {
+          if (line_data.features[i].geometry.distanceTo(pointFeature.geometry) < document.getElementById("dist").value) {
+            largeTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, {featureProjection: 'EPSG: 3857' }));
+            console.log("Test!" + largeTrail);
+            break
+          }
+        }*/
         map.setView(new View({
           center: fromLonLat([longitude, latitude]),
           zoom: 14
@@ -597,11 +653,22 @@ function distance(lat1, lon1, lat2, lon2, unit) {
   if (unit == "N") { dist = dist * 0.8684 };
   return dist
 }
+function jsonAnswerDataToListElements(json_answer) {
+  var data = json_answer;
+  var n = data.length;
+  var r = []
+  for (var i = 0; i < n; ++i) {
+    var row = data[i];
+    var geomJson = $.parseJSON(row.st_asgeojson);
+    r.push(geomJson);
+  }
+  return r;
+}
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- FUNCTIONS FOR SIGN OUT USER
 //Signs out the current user
-function signOutUsr () {
+function signOutUsr() {
   var request = $.ajax({
     url: 'http://localhost:3000/signoutusr',
     type: "POST",

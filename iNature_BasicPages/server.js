@@ -93,8 +93,16 @@ app.get('/test_wgs84_point', (req, res) => {
   });
 });
 //TEST - KAN RADERAS NÄR KLAR - Gets line data as GeoJson from test_wgs84_line
-app.get('test_wgs84_line', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(geom) FROM "test_wgs84_linje"', (err, dbResponse) => {
+app.get('/test_wgs84_line...', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "test_wgs84_linje"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//TEST - KAN RADERAS NÄR KLAR - Gets line data as GeoJson from test_wgs84_line
+app.get('/test_wgs84_line', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(geom) FROM "p_pathsmall"', (err, dbResponse) => {
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dbResponse.rows); //send res as a response to client
