@@ -71,7 +71,17 @@ app.get ('/myplaces', (req,res) => {
     res.send (dbResponse.rows); //sÃ¤nder som repons till klienten
   });
  });
-//Takes lon, lat, place and description of a My-place-position (along with user id - not handled yet) and stores in DB (myplaces table) -- Used by function 'createMyPosition'
+ //Gets all My-places-positions and its beloning information of all users
+ app.get ('/myplacesall', (req,res) => {
+   pool.query ('select * from myplaces where usrid <> (select * from signedin)', (err, dbResponse ) => {
+     if ( err) console.log (err);
+     console.log (dbResponse.rows); // respons till servern
+     // here dbResponse is available , your data processing logic goes here
+     res.setHeader ('Access-Control-Allow-Origin', '*');
+     res.send (dbResponse.rows); //sÃ¤nder som repons till klienten
+   });
+  });
+//Takes lon, lat, place and description of a My-place-position  and stores in DB (myplaces table) -- Used by function 'createMyPosition'
 app.post ('/create', (req , res) => { //req = from ajax,
   console.log ( req.body );
    // data you send from your application is available on req.body object , your data processing logic goes here

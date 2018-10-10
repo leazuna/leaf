@@ -126,7 +126,7 @@ var searchResultStyle = new Style({
     })
   })
 });
-//Defiens marke style for My places/Create
+//Defiens marke style for My places/Create for the signed in user
 var myPlaceStyle = new Style({
   text: new ol.style.Text({
     text: '\uf004',
@@ -142,7 +142,7 @@ var myPlaceStyle = new Style({
     })
   })
 });
-//Defiens marke style for My places/Create
+//Defiens marke style for My places/Create for all users
 var otherUsersPlaceStyle = new Style({
   text: new ol.style.Text({
     text: '\uf192',
@@ -226,12 +226,19 @@ var searchResultPos = new VectorLayer({
   source: searchResultArray,
   style: searchResultStyle
 });
-//Creates an vector array to store positions of 'My places'
+//Creates an vector array to store positions of 'My places' for the signed in user
 var myPlaceArray = new VectorSource();
 //Creates an vector layer containing vector array and styling for markers of 'My places'
 var myPlace = new VectorLayer({
   source: myPlaceArray,
   style: myPlaceStyle
+});
+//Creates an vector array to store positions of 'My places' for all users
+var myPlaceArrayAll = new VectorSource();
+//Creates an vector layer containing vector array and styling for markers of 'My places'
+var myPlaceAll = new VectorLayer({
+  source: myPlaceArrayAll,
+  style: otherUsersPlaceStyle
 });
 //Creates an vector array to store positions of 'My places'
 var otherUsersPlaceArray = new VectorSource();
@@ -253,7 +260,7 @@ var largeTrail = new VectorLayer({
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
   target: 'map',
-  layers: [roads, largeTrail, myPos, myPlace, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos, otherUsersPlace],
+  layers: [roads, largeTrail, myPos, myPlace, myPlaceAll, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos, otherUsersPlace],
   view: new View({
     center: fromLonLat([18.160513, 59.289951]),
     zoom: 15,
@@ -364,6 +371,43 @@ triggMyPlaces.addEventListener("click", showHideMyPlaces);
 $("#myplaces").click(function (event) {
   $(this).find('i').toggleClass('fa fa-heart').toggleClass('far fa-heart');
 });
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- LOAD ALL FEATURES FROM myPlaces THE DATABASE WHEN CLICKING ON BUTTON 'My places'
+//Creates a feature when creating adding a new place to 'My places'
+function addMyPlaceMarkerAll(lon, lat, place, descr) {
+  var iconFeature = new Feature({
+    geometry: new Point(transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
+    place: place,
+    descr: descr
+  });
+  myPlaceArrayAll.addFeature(iconFeature);
+}
+//Loads all "My places" for a specific user (user not handled yet)
+function loadMyPlacesAll(event) {
+  $.ajax({
+    url: 'http://localhost:3000/myplacesall',
+    type: 'GET',
+    success: function (res) {
+      for (var i in res) {
+        //console.log(res[i].lon);
+        addMyPlaceMarkerAll(res[i].lon, res[i].lat, res[i].place, res[i].descr);
+      }
+    }
+  });
+}
+//Controls the 'My place' (heart) button: if true (features not loaded), loads features - if false (features loaded), removes features
+var noFeaturesAll = true;
+function showHideMyPlacesAll() {
+  if (noFeaturesAll) {
+    loadMyPlacesAll();
+  }
+  else myPlaceArrayAll.clear()
+  noFeaturesAll = !noFeaturesAll;
+}
+//Triggers showHideMyPlaces function
+var triggMyPlacesAll = document.getElementById("otherUsersplaces");
+triggMyPlacesAll.addEventListener("click", showHideMyPlacesAll);
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- FUNCTIONS FOR POPPUPS OF 'My places'
