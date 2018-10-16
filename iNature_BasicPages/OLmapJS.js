@@ -42,7 +42,7 @@ var bathingSiteStyle = new Style({
     }),
     stroke: new ol.style.Stroke({
       color: '#4a6300',
-      width: 1
+      width: 10
     })
   })
 });
@@ -171,7 +171,7 @@ var largeTrailStyle = new Style({
     lineDash: [4,4]
   })
 });
-var TrailStyle = new Style({
+var trailStyle = new Style({
   stroke: new ol.style.Stroke({
     color: 'black',
     width: 1,
@@ -188,25 +188,25 @@ var smallTrailStyle = new Style({
 var greenTrailStyle = new Style({
   stroke: new ol.style.Stroke({
     color: 'green',
-    width: 1
+    width: 2
   })
 });
 var redTrailStyle = new Style({
   stroke: new ol.style.Stroke({
     color: 'red',
-    width: 1
+    width: 2
   })
 });
 var blueTrailStyle = new Style({
   stroke: new ol.style.Stroke({
     color: 'blue',
-    width: 1
+    width: 2
   })
 });
 var purpleTrailStyle = new Style({
   stroke: new ol.style.Stroke({
     color: 'purple',
-    width: 1
+    width: 2
   })
 });
 //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -299,13 +299,62 @@ var largeTrail = new VectorLayer({
   source: largeTrailArray,
   style: largeTrailStyle
 });
+//Creates an vector array to store line objects in, so that it can be removed later on
+var roadsArray = new VectorSource({});
+//Creates a vector layer for the create line
+var roadsLayer = new VectorLayer({
+  source: roadsArray,
+  style: roadStyle
+});
+// //Creates an vector array to store line objects in, so that it can be removed later on
+var trailArray = new VectorSource({});
+//Creates a vector layer for the create line
+var trail = new VectorLayer({
+  source: trailArray,
+  style: trailStyle
+});
+//Creates an vector array to store line objects in, so that it can be removed later on
+var smallTrailArray = new VectorSource({});
+//Creates a vector layer for the create line
+var smallTrail = new VectorLayer({
+  source: smallTrailArray,
+  style: smallTrailStyle
+});
+// //Creates an vector array to store line objects in, so that it can be removed later on
+var greenTrailArray = new VectorSource({});
+//Creates a vector layer for the create line
+var greenTrail = new VectorLayer({
+  source: greenTrailArray,
+  style: greenTrailStyle
+});
+// //Creates an vector array to store line objects in, so that it can be removed later on
+var redTrailArray = new VectorSource({});
+//Creates a vector layer for the create line
+var redTrail = new VectorLayer({
+  source: redTrailArray,
+  style: redTrailStyle
+});
+//Creates an vector array to store line objects in, so that it can be removed later on
+var blueTrailArray = new VectorSource({});
+//Creates a vector layer for the create line
+var blueTrail = new VectorLayer({
+  source: blueTrailArray,
+  style: blueTrailStyle
+});
+// //Creates an vector array to store line objects in, so that it can be removed later on
+var purpleTrailArray = new VectorSource({});
+//Creates a vector layer for the create line
+var purpleTrail = new VectorLayer({
+  source: purpleTrailArray,
+  style: purpleTrailStyle
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- DEFINING THE MAP AND IT´S VIEW AND LAYERS
 //Defines the map - NOTE satellite should NOT be included in the map as it is added later in functions
 var map = new Map({
   target: 'map',
-  layers: [roads, largeTrail, myPos, myPlace, myPlaceAll, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos, otherUsersPlace],
+  layers: [ roads, greenTrail, redTrail, blueTrail, purpleTrail, roadsLayer, trail, smallTrail, largeTrail, myPos, myPlace, myPlaceAll, bathingSitePos, naturalBathingSitePos, viewPointsPos, gemsPos, clickedPos, searchResultPos, otherUsersPlace],
   view: new View({
     center: fromLonLat([18.160513, 59.289951]),
     zoom: 15,
@@ -754,6 +803,257 @@ function jsonAnswerDataToListElements(json_answer) {
   return r;
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------
+//----VIEW LAYERS--------------------
+// LOAD SMALL TRAILS-------------------------------
+function loadSmallTrail(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_pathnondistinct",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      smallTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noSmallTrails = true;
+function showHideSmallTrails() {
+  if (noSmallTrails) {
+    loadSmallTrail();
+  }
+  else smallTrailArray.clear()
+  noSmallTrails = !noSmallTrails;
+}
+//Triggers showHidesmallTrail function
+var triggSmallTrails = document.getElementById("smalltrail");
+triggSmallTrails.addEventListener("click", showHideSmallTrails);
+//-----------------
+
+//----- LOAD TRAILS---------------
+function loadTrail(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_pathsmall",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      trailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noTrails = true;
+function showHideTrails() {
+  if (noTrails) {
+    loadTrail();
+  }
+  else trailArray.clear()
+  noTrails = !noTrails;
+}
+//Triggers showHidesmallTrail function
+var triggTrails = document.getElementById("trail");
+triggTrails.addEventListener("click", showHideTrails);
+//----------------------------------
+
+//---------LOAD LARGE TRAILS
+function loadLargeTrail(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_pathbig",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      largeTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noLargeTrails = true;
+function showHideLargeTrails() {
+  if (noLargeTrails) {
+    loadLargeTrail();
+  }
+  else largeTrailArray.clear()
+  noLargeTrails = !noLargeTrails;
+}
+//Triggers showHidesmallTrail function
+var triggLargeTrails = document.getElementById("largetrail");
+triggLargeTrails.addEventListener("click", showHideLargeTrails);
+//--------------------------
+
+//------LOAD ROADS----------
+function loadRoads(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_road",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      roadsArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noRoads = true;
+function showHideRoads() {
+  if (noRoads) {
+    loadRoads();
+  }
+  else roadsArray.clear()
+  noRoads = !noRoads;
+}
+//Triggers showHidesmallTrail function
+var triggRoads = document.getElementById("allroads");
+triggRoads.addEventListener("click", showHideRoads);
+//-----------------
+
+//------------------LOAD TRAIL BLUE---------
+
+function loadBlueTrail(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_traillake",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      blueTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noBlueTrails = true;
+function showHideBlueTrails() {
+  if (noBlueTrails) {
+    loadBlueTrail();
+  }
+  else BlueTrailArray.clear()
+  noBlueTrails = !noBlueTrails;
+}
+//Triggers showHidesmallTrail function
+var triggBlueTrails = document.getElementById("lakeblue");
+triggBlueTrails.addEventListener("click", showHideBlueTrails);
+//--------------------------
+
+//----------LOAD GREEN TRAIL--------------
+function loadGreenTrail(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_trailgreen",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      greenTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noGreenTrails = true;
+function showHideGreenTrails() {
+  if (noGreenTrails) {
+    loadGreenTrail();
+  }
+  else greenTrailArray.clear()
+  noGreenTrails = !noGreenTrails;
+}
+//Triggers showHidesmallTrail function
+var triggGreenTrails = document.getElementById("green");
+triggGreenTrails.addEventListener("click", showHideGreenTrails);
+//--------------------------
+
+//-----------LOAD RED TRAIL-------------
+
+function loadRedTrail(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_trailhellas5",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      redTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noRedTrails = true;
+function showHideRedTrails() {
+  if (noRedTrails) {
+    loadRedTrail();
+  }
+  else LargeRedArray.clear()
+  noRedTrails = !noRedTrails;
+}
+//Triggers showHidesmallTrail function
+var triggRedTrails = document.getElementById("hellas5red");
+triggRedTrails.addEventListener("click", showHideRedTrails);
+//------------------------------
+
+//-----LOAD PURPLE TRAIL------------
+function loadPurpleTrail(evt){
+  var req = $.ajax ({
+      url: "http://localhost:3000/w_trailwhite",
+      type: "GET",
+  }); 
+  req.done(function(resp_json) {
+      console.log(JSON.stringify(resp_json));
+      var listaFeat=jsonAnswerDataToListElements(resp_json);
+      var linjedata= {
+          "type": "FeatureCollection",
+          "features": listaFeat
+      };
+      purpleTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+  });
+}
+var noPurpleTrails = true;
+function showHidePurpleTrails() {
+  if (noPurpleTrails) {
+    loadPurpleTrail();
+  }
+  else purpleTrailArray.clear()
+  noPurpleTrails = !noPurpleTrails;
+}
+//Triggers showHidesmallTrail function
+var triggPurpleTrails = document.getElementById("whitepurple");
+triggPurpleTrails.addEventListener("click", showHidePurpleTrails);
+//---------------------------------------------------------
+
+
+
+function jsonAnswerDataToListElements(json_answer){
+  var data=json_answer;
+  var n=data.length;
+  var r=[]
+  for( var i = 0; i <n; ++i ) {
+      var row = data[i];
+      var geomJson = $.parseJSON(row.st_asgeojson);
+      r.push(geomJson);
+  }
+  return r;
+}
+
+//--------------------------------------------------------------------FUNCTION FOR VIEW LAYER-------------------------------------------------------------//
+
 
 //-------------------------------------------------------------------- FUNCTIONS FOR SIGN OUT USER
 //Signs out the current user
