@@ -26,6 +26,7 @@ const pool = new Pool ({
 //-------------------------------------------------------------------- SIGN IN, SIGN UP
 //Takes username and password as input and checks if it is in the DB, if yes - returns user id, elsewhere returns false -- Used by function 'signin'
 app.post ('/signin', (req,res) => {
+  console.log(req.body)
   pool.query (`select case when '${req.body.uname}' in (select name from usr) and '${req.body.psw}' in (select password from usr) then (select name from usr where name = '${req.body.uname}')
   else 'false' end`, (err, dbResponse ) => {
     if ( err)  console.log (err);
@@ -48,6 +49,7 @@ app.post ('/signin', (req,res) => {
 
 //Takes username, password and a random id as an in put and inserts it into DB (usr table) -- Used by function 'signout'
 app.post ('/signup', (req , res) => { //req = from ajax,
+  console.log(req.body)
   pool.query (`INSERT INTO usr VALUES ('${req.body.uname}', '${req.body.psw}')`, function (err , dbResponse ) {
     if ( err) {
       res.send (err.name);
@@ -103,16 +105,17 @@ app.get('/test_wgs84_point', (req, res) => {
   });
 });
 //TEST - KAN RADERAS NÄR KLAR - Gets line data as GeoJson from test_wgs84_line
-app.get('/test_wgs84_line...', (req, res) => {
+app.get('/test_wgs84_line', (req, res) => {
   pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "test_wgs84_linje"', (err, dbResponse) => {
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dbResponse.rows); //send res as a response to client
   });
 });
-//TEST - KAN RADERAS NÄR KLAR - Gets line data as GeoJson from test_wgs84_line
-app.get('/test_wgs84_line', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(geom) FROM "p_pathsmall"', (err, dbResponse) => {
+//TEST - Vill kunna använda endast ett anrop som varierar tabell utifrån en input.
+app.get('/find', (req, res) => {
+  console.log(req.body);
+  pool.query(`SELECT ST_AsGeoJSON(st_transform(geom, 4326)) FROM ${req.body.table}`, (err, dbResponse) => {
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dbResponse.rows); //send res as a response to client
@@ -145,6 +148,70 @@ app.get('/w_viewpoint', (req, res) => {
 //Gets point data from w_nicespots (Hidden Gems)
 app.get('/w_nicespots', (req, res) => {
   pool.query('SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "w_nicespots"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_pathbig (Large Trail)
+app.get('/w_pathbig', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_pathbig"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_pathsmall (Trail)
+app.get('/w_pathsmall', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_pathsmall"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_pathnondistinct (Small Trail)
+app.get('/w_pathnondistinct', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_pathnondistinct"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_trailgreen (green Trail)
+app.get('/w_trailgreen', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_trailgreen"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_trailhellas5 (Red Trail)
+app.get('/w_trailhellas5', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_trailhellas5"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_traillake (Blue Trail)
+app.get('/w_traillake', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_traillake"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_trailwhite (Purple Trail)
+app.get('/w_trailwhite', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_trailwhite"', (err, dbResponse) => {
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from w_road (Roads)
+app.get('/w_road', (req, res) => {
+  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_road"', (err, dbResponse) => {
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dbResponse.rows); //send res as a response to client
