@@ -577,6 +577,7 @@ var longitude;
 var clickcoordinate = [18.160513, 59.289951];
 var urlend = "/w_bathmade";
 var target = "point";
+var table; 
 
 var searchclickpoint = document.getElementById("StartSearch");
 searchclickpoint.addEventListener("click", function () { findpoints() });
@@ -607,28 +608,73 @@ function findpoints() {
   if ($("input[name='SearchChoice']:checked").val() == "bathSite") {
     urlend = "/w_bathmade";
     target = "point";
+    table = "w_bathmade"
   }
   else if ($("input[name='SearchChoice']:checked").val() == "NaturBathSite") {
     urlend = "/w_bathnatural";
     target = "point";
+    table = "w_bathnatural"
   }
   else if ($("input[name='SearchChoice']:checked").val() == "View") {
     urlend = "/w_viewpoint";
     target = "point";
+    table = "w_viewpoint"
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Gems") {
     urlend = "/w_nicespots";
     target = "point";
+    table = "w_nicespots"
   }
   else if ($("input[name='SearchChoice']:checked").val() == "LargeTrail") {
-    urlend = "/test_wgs84_line";
+    urlend = "/w_pathbig";
     target = "line";
+    table = "w_pathbig"
   }
+  else if ($("input[name='SearchChoice']:checked").val() == "Trail") {
+    urlend = "/w_pathsmall";
+    target = "line";
+    table = "w_pathsmall"
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "SmallTrail") {
+    urlend = "/w_pathnondistinct";
+    target = "line";
+    table = "w_pathnondistinct"
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "GreenTrail") {
+    urlend = "/w_trailgreen";
+    target = "line";
+    table = "w_trailgreen"
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "RedTrail") {
+    urlend = "/w_trailhellas5";
+    target = "line";
+    table = "w_trailhellas5"
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "BlueTrail") {
+    urlend = "/w_traillake";
+    target = "line";
+    table = "w_traillake"
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "PurpleTrail") {
+    urlend = "/w_trailwhite";
+    target = "line";
+    table = "w_trailwhite"
+  }
+  else if ($("input[name='SearchChoice']:checked").val() == "DetailedRoads") {
+    urlend = "/w_road";
+    target = "line";
+    table = "w_road"
+  }
+  console.log(table)
   $.ajax({
     url: 'http://localhost:3000' + urlend,
     type: 'GET',
-
-    success: function (res) {
+    //cache: false,
+    //contentType: "application/json",
+    //data: JSON.stringify({ //req body
+    //  table: table
+    //}),
+    success: function(res) {
 
       console.log(findFromPos, target, urlend, res);
       if (findFromPos) {
