@@ -112,72 +112,10 @@ app.get('/test_wgs84_line', (req, res) => {
     res.send(dbResponse.rows); //send res as a response to client
   });
 });
-<<<<<<< HEAD
 //TEST - Vill kunna använda endast ett anrop som varierar tabell utifrån en input.
 app.get('/find', (req, res) => {
   console.log(req.body);
   pool.query(`SELECT ST_AsGeoJSON(st_transform(geom, 4326)) FROM ${req.body.table}`, (err, dbResponse) => {
-=======
-//TEST - KAN RADERAS NÄR KLAR - Gets line data as GeoJson from test_wgs84_line
-app.get('/w_pathsmall', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_pathsmall"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-//Gets line data from w_pathbig
-app.get('/w_pathbig', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_pathbig"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-// Gets line data from w_pathnondistinct
-app.get('/w_pathnondistinct', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_pathnondistinct"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-// Gets line data from w_trailgreen
-app.get('/w_trailgreen', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_trailgreen"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-// Gets line data from w_trailhellas5
-app.get('/w_trailhellas5', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_trailhellas5"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-// Gets line data from w_traillake
-app.get('/w_traillake', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_traillake"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-// Gets line data from w_pathnondistinct
-app.get('/w_trailwhite', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_trailwhite"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-// Gets line data from w_pathnondistinct
-app.get('/w_road', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "w_road"', (err, dbResponse) => {
->>>>>>> c351913e1b3b80991159c662920801c5b28fa885
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dbResponse.rows); //send res as a response to client
