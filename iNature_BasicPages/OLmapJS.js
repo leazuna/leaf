@@ -626,7 +626,7 @@ var longitude;
 var clickcoordinate = [18.160513, 59.289951];
 var urlend = "/w_bathmade";
 var target = "point";
-var table; 
+var table;
 
 var searchclickpoint = document.getElementById("StartSearch");
 searchclickpoint.addEventListener("click", function () { findpoints() });
@@ -717,15 +717,16 @@ function findpoints() {
   }
   console.log(table)
   $.ajax({
-    url: 'http://localhost:3000' + urlend,
-    type: 'GET',
-    //cache: false,
-    //contentType: "application/json",
-    //data: JSON.stringify({ //req body
-    //  table: table
-    //}),
+    url: 'http://localhost:3000' +urlend ,
+    type: "POST",
+    cache: false,
+    contentType: "application/json",
+    data: JSON.stringify({ //req body
+    table: table
+    }),
     success: function(res) {
-
+      console.log("test")
+      console.log(res);
       console.log(findFromPos, target, urlend, res);
       if (findFromPos) {
         console.log('find from position');
@@ -857,7 +858,7 @@ function loadSmallTrail(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_pathnondistinct",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -865,7 +866,7 @@ function loadSmallTrail(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      smallTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      smallTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noSmallTrails = true;
@@ -886,7 +887,7 @@ function loadTrail(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_pathsmall",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -894,7 +895,7 @@ function loadTrail(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      trailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      trailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noTrails = true;
@@ -915,7 +916,7 @@ function loadLargeTrail(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_pathbig",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -923,7 +924,7 @@ function loadLargeTrail(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      largeTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      largeTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noLargeTrails = true;
@@ -944,7 +945,7 @@ function loadRoads(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_road",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -952,7 +953,7 @@ function loadRoads(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      roadsArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      roadsArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noRoads = true;
@@ -974,7 +975,7 @@ function loadBlueTrail(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_traillake",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -982,7 +983,7 @@ function loadBlueTrail(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      blueTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      blueTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noBlueTrails = true;
@@ -1003,7 +1004,7 @@ function loadGreenTrail(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_trailgreen",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -1011,7 +1012,7 @@ function loadGreenTrail(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      greenTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      greenTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noGreenTrails = true;
@@ -1033,7 +1034,7 @@ function loadRedTrail(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_trailhellas5",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -1041,7 +1042,7 @@ function loadRedTrail(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      redTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      redTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noRedTrails = true;
@@ -1062,7 +1063,7 @@ function loadPurpleTrail(evt){
   var req = $.ajax ({
       url: "http://localhost:3000/w_trailwhite",
       type: "GET",
-  }); 
+  });
   req.done(function(resp_json) {
       console.log(JSON.stringify(resp_json));
       var listaFeat=jsonAnswerDataToListElements(resp_json);
@@ -1070,7 +1071,7 @@ function loadPurpleTrail(evt){
           "type": "FeatureCollection",
           "features": listaFeat
       };
-      purpleTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));    
+      purpleTrailArray.addFeatures( (new ol.format.GeoJSON()).readFeatures(linjedata, {featureProjection: 'EPSG: 3856' }));
   });
 }
 var noPurpleTrails = true;
