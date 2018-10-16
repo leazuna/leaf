@@ -44,10 +44,6 @@
 <span data-toggle="tooltip" title="Layer">
     <button type="button" class="btn menubtn" data-toggle="collapse" data-target="#LayerMenu"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
 </span>
-    <!--Icon+tooltip in upper menu - find -->
-<span data-toggle="tooltip" title="Find">
-    <button type="button" class="btn menubtn" data-toggle="collapse" data-target="#FindMenu"><span class="glyphicon glyphicon-search"></span></button>
-</span>
     <!--Icon+tooltip in upper menu - sign in -->
 <span data-toggle="tooltip" title="Sign in">
     <a type="button" class="btn menubtn" href="./index.html"><i class="fas fa-user-check"></i></a>
@@ -127,106 +123,6 @@
                     <span data-toggle="tooltip" title="To access 'Other Users places' please Sign In to iNature">
                     <a id="otherUsersPlaces" type="btn disabled" style="pointer-events: none;" class="layerbtn" href="#" disabled><i class="fa fa-dot-circle-o" ></i></a>
                     </span>
-                </div>
-            </div>
-        </div>
-    </div>
-<hr style="margin: 0;">
-<!-- The fold-out menu from the find-icon-button - grid structure -->
-<div id="FindMenu" class="collapse">
-        <div class="container">
-                <div class="row">
-                    <!-- The find-menu alternative where the search distance is chosen -->
-                    <div class="col-xs-2">
-                        <div class="form-group">
-                            <label for="dist"><h6 style="margin-left: 15px; color: #4a6300;">Distance [km] </h6></label>
-                            <input type="number" class="form-control" id="dist" value=1>
-                        </div>
-                    </div>
-                    <!-- The find-menu alternatives regarding the what to search for - radiobuttons with icons and tooltips -->
-                    <div class="col-xs-5">
-                    <h6 style="margin-left: 15px; color: #4a6300;">What are you searching for?</h6>
-                    <label class="radio-inline"><input value="bathSite" type="radio" name="SearchChoice" checked>
-                        <span data-toggle="tooltip" title="Bathing sites">
-                            <p id="bathingsites" class="findbtn"><i class="far fa-life-ring"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="NaturBathSite" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Natural bathing sites">
-                            <p id="naturalbath" class="findbtn"><i class="fa fa-tint"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="View" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Viewpoints">
-                            <p id="viewpoints" class="findbtn"><i class="fas fa-binoculars"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="Gems" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Hidden gems">
-                            <p id="gems" class="findbtn"><i class="far fa-gem"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="DetailedRoads" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Roads">
-                            <p id="allroads" class="findbtn"><i class="fas fa-road"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="LargeTrail" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Large trail">
-                            <p id="largetrail" style="color: #545556" class="findbtn"><i class="fas fa-route"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="Trail" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Trail">
-                            <p id="trail" class="findbtn"><i class="fas fa-route"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="SmallTrail" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Small trail">
-                            <p id="smalltrail" style="color: #caccce" class="findbtn"><i class="fas fa-route"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="GreenTrail" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Green trail">
-                            <p id="green" style="color: green" class="findbtn"><i class="fas fa-map-signs"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="RedTrail" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Red trail">
-                            <p id="hellas5red" style="color: red" class="findbtn"><i class="fas fa-map-signs"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="BlueTrail" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Blue trail">
-                            <p id="lakeblue" style="color: blue" class="findbtn"><i class="fas fa-map-signs"></i></p>
-                        </span>
-                    </label>
-                    <label class="radio-inline"><input value="PurpleTrail" type="radio" name="SearchChoice">
-                        <span data-toggle="tooltip" title="Purple trail">
-                            <p id="whitepurple" style="color: purple" class="findbtn"><i class="fas fa-map-signs"></i></p>
-                        </span>
-                    </label>
-                <!-- The find-menu alternatives regarding where there search will be initiated - klick in map will be needed -->    
-                </div>
-                <div class="col-xs-3">
-                    <h6 style="color: #4a6300;">From where are you searching?</h6>
-                    <label class="radio"><input value="fromGPSlocation" type="radio" name="SearchInit">
-                        <p id="GPSlocation" class="findbtn">My position</p>
-                    </label>
-                    <label class="radio"><input value="fromClick" type="radio" name="SearchInit" checked>
-                        <p id="aPlace" class="findbtn">A place</p>
-                    </label>
-                    <label class="radio"><input value="fromTrail" type="radio" name="SearchInit">
-                        <p id="aLine" class="findbtn">A road or trail</p>
-                    </label>
-                </div>
-                <!-- The find-menu alternatives performing the search -->  
-                <div class="col-xs-2">
-                    <br>
-                    <br>
-                    <a id="StartSearch" type="button" class="findbtn" href="#"><span class="glyphicon glyphicon-search"></span> Search</a>
-                    <br>
-                    <a id="ClearSearch" style="font-size: 10px;" type="button" class="findbtn" href="#"><span class="glyphicon glyphicon-remove"></span> Clear Search</a>
                 </div>
             </div>
         </div>

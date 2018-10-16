@@ -158,12 +158,57 @@ var otherUsersPlaceStyle = new Style({
     })
   })
 });
+var roadStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'black',
+    width: 3
+  })
+});
 var largeTrailStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'black',
+    width: 2,
+    lineDash: [4,4]
+  })
+});
+var TrailStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'black',
+    width: 1,
+    lineDash: [4,4]
+  })
+});
+var smallTrailStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'grey',
+    width: 1,
+    lineDash: [4,4]
+  })
+});
+var greenTrailStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'green',
+    width: 1
+  })
+});
+var redTrailStyle = new Style({
   stroke: new ol.style.Stroke({
     color: 'red',
     width: 1
   })
-})
+});
+var blueTrailStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'blue',
+    width: 1
+  })
+});
+var purpleTrailStyle = new Style({
+  stroke: new ol.style.Stroke({
+    color: 'purple',
+    width: 1
+  })
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------- MAP & VECTOR LAYERS
