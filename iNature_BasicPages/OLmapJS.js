@@ -660,7 +660,7 @@ function findpoints() {
           //"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
           "features": list_Feat
         }
-        largeTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, {featureProjection: 'EPSG: 4326' }))
+        largeTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, {featureProjection: 'EPSG: 3857' }))
         /*console.log(positionArray.features);
         console.log(positionArray.geometry, line_data.features[1].geometry.distanceTo(pointFeature.geometry), document.getElementById("dist").value);
         for (var i = 1; i <= line_data.features.length - 1; i++) {
