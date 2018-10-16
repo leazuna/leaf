@@ -942,7 +942,7 @@ function showHideBlueTrails() {
   if (noBlueTrails) {
     loadBlueTrail();
   }
-  else BlueTrailArray.clear()
+  else blueTrailArray.clear()
   noBlueTrails = !noBlueTrails;
 }
 //Triggers showHidesmallTrail function
@@ -1001,7 +1001,7 @@ function showHideRedTrails() {
   if (noRedTrails) {
     loadRedTrail();
   }
-  else LargeRedArray.clear()
+  else redTrailArray.clear()
   noRedTrails = !noRedTrails;
 }
 //Triggers showHidesmallTrail function
