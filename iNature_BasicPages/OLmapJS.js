@@ -657,62 +657,63 @@ function findpoints() {
   if ($("input[name='SearchChoice']:checked").val() == "bathSite") {
     urlend = "/w_bathmade";
     target = "point";
-    table = "w_bathmade"
+    table = "w_bathmade";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "NaturBathSite") {
     urlend = "/w_bathnatural";
     target = "point";
-    table = "w_bathnatural"
+    table = "w_bathnatural";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "View") {
     urlend = "/w_viewpoint";
     target = "point";
-    table = "w_viewpoint"
+    table = "w_viewpoint";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Gems") {
     urlend = "/w_nicespots";
     target = "point";
-    table = "w_nicespots"
+    table = "w_nicespots";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "LargeTrail") {
     urlend = "/w_pathbig";
     target = "line";
-    table = "w_pathbig"
+    table = "w_pathbig";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Trail") {
     urlend = "/w_pathsmall";
     target = "line";
-    table = "w_pathsmall"
+    table = "w_pathsmall";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "SmallTrail") {
     urlend = "/w_pathnondistinct";
     target = "line";
-    table = "w_pathnondistinct"
+    table = "w_pathnondistinct";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "GreenTrail") {
     urlend = "/w_trailgreen";
     target = "line";
-    table = "w_trailgreen"
+    table = "w_trailgreen";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "RedTrail") {
     urlend = "/w_trailhellas5";
     target = "line";
-    table = "w_trailhellas5"
+    table = "w_trailhellas5";
+    toArray = "redTrailArray";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "BlueTrail") {
     urlend = "/w_traillake";
     target = "line";
-    table = "w_traillake"
+    table = "w_traillake";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "PurpleTrail") {
     urlend = "/w_trailwhite";
     target = "line";
-    table = "w_trailwhite"
+    table = "w_trailwhite";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "DetailedRoads") {
     urlend = "/w_road";
     target = "line";
-    table = "w_road"
+    table = "w_road";
   }
   console.log(table)
   $.ajax({
@@ -738,7 +739,7 @@ function findpoints() {
               createfoundpoints(latitude, longitude, "myPos");
             }
             else if (target === "line") {
-              createfoundlines(latitude, longitude, "myPos");
+              createfoundlines(latitude, longitude, "myPos", toArray);
             }
           }
           function error() {
@@ -800,6 +801,7 @@ function findpoints() {
           //"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
           "features": list_Feat
         }
+        //Implement toArray....!!!
         largeTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, {featureProjection: 'EPSG: 3857' }))
         /*console.log(positionArray.features);
         console.log(positionArray.geometry, line_data.features[1].geometry.distanceTo(pointFeature.geometry), document.getElementById("dist").value);
