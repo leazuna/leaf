@@ -112,14 +112,14 @@ app.get('/test_wgs84_line', (req, res) => {
     res.send(dbResponse.rows); //send res as a response to client
   });
 });
-//TEST - Vill kunna använda endast ett anrop som varierar tabell utifrån en input.
-app.post('/w_bathmade', (req, res) => {
+//TEST - Vill kunna använda endast ett anrop som varierar tabell utifrån en input. 
+app.post('/find', (req, res) => {
   console.log(req.body.table);
-   pool.query(`SELECT ST_AsGeoJSON(st_transform(geom, 4326)) FROM "${req.body.table}"`, (err, dbResponse) => {
-     console.log(dbResponse);
+   pool.query(`SELECT ST_AsGeoJSON(st_transform(geom, 3857)) FROM "${req.body.table}"`, (err, dbResponse) => {
+     console.log(dbResponse.rows);
      if (err) console.log(err);
      res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse); //send res as a response to client
+    res.send(dbResponse.rows); //send res as a response to client
    });
 });
 //Gets point data from w_bathmade (Bathing Sites)
