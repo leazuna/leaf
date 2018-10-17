@@ -635,12 +635,13 @@ function createMyPosition() {
 //var findFromPos = false;
 //var findFromPoint = true;
 //var findFromTrail = false;
-var latitude;
-var longitude;
+var latitude = "18.160513";
+var longitude = "59.289951";
 var clickcoordinate = [18.160513, 59.289951];
 var urlend = "/w_bathmade";
 var target = "point";
 var table;
+var distance = "1";
 
 var searchclickpoint = document.getElementById("StartSearch");
 searchclickpoint.addEventListener("click", function () { findpoints() });
@@ -669,76 +670,81 @@ function findpoints() {
     findFromTrail = true;
 }*/
   if ($("input[name='SearchChoice']:checked").val() == "bathSite") {
-    urlend = "/w_bathmade";
+    urlend = "/findpoint";
     target = "point";
     table = "w_bathmade";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "NaturBathSite") {
-    urlend = "/w_bathnatural";
+    urlend = "/findpoint";
     target = "point";
     table = "w_bathnatural";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "View") {
-    urlend = "/w_viewpoint";
+    urlend = "/findpoint";
     target = "point";
     table = "w_viewpoint";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Gems") {
-    urlend = "/w_nicespots";
+    urlend = "/findpoint";
     target = "point";
     table = "w_nicespots";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "LargeTrail") {
-    urlend = "/w_pathbig";
+    urlend = "/findline";
     target = "line";
     table = "w_pathbig";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Trail") {
-    urlend = "/w_pathsmall";
+    urlend = "/findline";
     target = "line";
     table = "w_pathsmall";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "SmallTrail") {
-    urlend = "/w_pathnondistinct";
+    urlend = "/findline";
     target = "line";
     table = "w_pathnondistinct";
+    distance = document.getElementById("dist").value
   }
   else if ($("input[name='SearchChoice']:checked").val() == "GreenTrail") {
-    urlend = "/w_trailgreen";
+    urlend = "/findline";
     target = "line";
     table = "w_trailgreen";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "RedTrail") {
-    urlend = "/w_trailhellas5";
+    urlend = "/findline";
     target = "line";
     table = "w_trailhellas5";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "BlueTrail") {
-    urlend = "/w_traillake";
+    urlend = "/findline";
     target = "line";
     table = "w_traillake";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "PurpleTrail") {
-    urlend = "/w_trailwhite";
+    urlend = "/findline";
     target = "line";
     table = "w_trailwhite";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "DetailedRoads") {
-    urlend = "/w_road";
+    urlend = "/findline";
     target = "line";
     table = "w_road";
   }
-  console.log(table)
+  console.log(table, longitude, latitude, distance)
   $.ajax({
-    url: 'http://localhost:3000/find',
+    url: 'http://localhost:3000' + urlend,
     type: "POST",
     cache: false,
     contentType: "application/json",
     data: JSON.stringify({ //req body
-      table: table
+      table: table,
+      longitude: longitude, 
+      latitude: latitude,
+      distance: distance
     }),
     success: function (res) {
-      console.log(findFromPos, target, urlend, res);
+      console.log(findFromPos, findFromPoint, findFromTrail, target, urlend);
+      console.log(res);
       if (findFromPos) {
         console.log('find from position');
 
@@ -799,7 +805,7 @@ function findpoints() {
         //console.log(lat, lon);
         map.setView(new View({
           center: fromLonLat([longitude, latitude]),
-          zoom: 14
+          zoom: 12
         }))
       }
       function createfoundlines(latitude, longitude, fromArray) {
@@ -807,14 +813,12 @@ function findpoints() {
         clickedArray.clear();
         positionArray.clear();
         addPositionMarker(longitude, latitude, fromArray);
-        console.log(res);
         var list_Feat = jsonAnswerDataToListElements(res);
         var line_data = {
           "type": "FeatureCollection",
           //"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
           "features": list_Feat
         }
-        console.log(line_data)
         searchTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, { featureProjection: 'EPSG: 3857' }))
         /*console.log(positionArray.features);
         console.log(positionArray.geometry, line_data.features[1].geometry.distanceTo(pointFeature.geometry), document.getElementById("dist").value);
