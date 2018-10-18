@@ -31,7 +31,7 @@ var posStyle = new Style({
     })
   })
 });
-//Defines marker style for the "bathing sites"
+//Defines marker style for the "natural bathing sites"
 var bathingSiteStyle = new Style({
   text: new ol.style.Text({
     text: '\uf1cd',
@@ -43,7 +43,7 @@ var bathingSiteStyle = new Style({
     }),
     stroke: new ol.style.Stroke({
       color: '#4a6300',
-      width: 10
+      width: 1
     })
   })
 });
