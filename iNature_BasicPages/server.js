@@ -137,32 +137,47 @@ app.post('/findpointfromline', (req, res) => {
 
 
 
-
-
-
+//Gets point data from w_bathmade (Natural Bathing Sites)
+app.get('/w_bathmade', (req, res) => {
+  pool.query('SELECT lat, lon FROM "w_bathmade"', (err, dbResponse) => {
+    if (err) console.log(err);
+    console.log(dbResponse.rows); // respons till servern
+    // here dbResponse is available , your data processing logic goes here
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //sÃ¤nder som repons till klienten
+  });
+});
 
 //Gets point data from w_natural (Natural Bathing Sites)
 app.get('/w_bathnatural', (req, res) => {
-  pool.query('SELECT ST_X(ST_Transform(geom, 3857)) AS "longitude", ST_Y(ST_Transform(geom, 3857)) AS "latitude" FROM "w_bathnatural"', (err, dbResponse) => {
+  pool.query('SELECT lat, lon FROM "w_bathnatural"', (err, dbResponse) => {
     if (err) console.log(err);
+    console.log(dbResponse.rows); // respons till servern
+    // here dbResponse is available , your data processing logic goes here
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
+    res.send(dbResponse.rows); //sÃ¤nder som repons till klienten
   });
 });
+
 //Gets point data from w_viewpoint (Viewpoints)
 app.get('/w_viewpoint', (req, res) => {
-  pool.query('SELECT ST_X(ST_Transform(geom, 3857)) AS "longitude", ST_Y(ST_Transform(geom, 3857)) AS "latitude" FROM "w_viewpoint"', (err, dbResponse) => {
+  pool.query('SELECT lat, lon FROM "w_viewpoint"', (err, dbResponse) => {
     if (err) console.log(err);
+    console.log(dbResponse.rows); // respons till servern
+    // here dbResponse is available , your data processing logic goes here
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
+    res.send(dbResponse.rows); //sÃ¤nder som repons till klienten
   });
 });
+
 //Gets point data from w_nicespots (Hidden Gems)
 app.get('/w_nicespots', (req, res) => {
-  pool.query('SELECT ST_X(ST_Transform(geom, 3857)) AS "longitude", ST_Y(ST_Transform(geom, 3857)) AS "latitude" FROM "w_nicespots"', (err, dbResponse) => {
+  pool.query('SELECT lat, lon FROM "w_nicespots"', (err, dbResponse) => {
     if (err) console.log(err);
+    console.log(dbResponse.rows); // respons till servern
+    // here dbResponse is available , your data processing logic goes here
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
+    res.send(dbResponse.rows); //sÃ¤nder som repons till klienten
   });
 });
 //Gets line data from w_pathbig (Large Trail)

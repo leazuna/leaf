@@ -11,6 +11,7 @@ import { defaults as defaultControls, ZoomToExtent } from 'ol/control.js';
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom';
 import { LineString, Point } from 'ol/geom.js';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
+import GeoJSON from 'ol/format/GeoJSON.js';
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------- POINT & LAYER STYLES FOR VECTOR LAYERS
@@ -1177,8 +1178,133 @@ var triggPurpleTrails = document.getElementById("whitepurple");
 triggPurpleTrails.addEventListener("click", showHidePurpleTrails);
 //---------------------------------------------------------
 
+//----------LOAD GEMS-------------
+function loadGems(event) {
+  $.ajax({
+    url: 'http://localhost:3000/w_nicespots',
+    type: 'GET',
+    success: function (res) {
+      for (var i in res) {
+        //console.log(res[i].lon);
+        addGemsMarker(res[i].lon, res[i].lat);
+      }
+    }
+  });
+}
+var noGems = true;
+function showHideGems() {
+  if (noGems) {
+    loadGems();
+  }
+  else gemsArray.clear()
+  noGems = !noGems;
+}
+//Triggers showHidesmallTrail function
+var triggGems = document.getElementById("gems");
+triggGems.addEventListener("click", showHideGems);
 
+function addGemsMarker(lon, lat) {
+  var iconFeature = new Feature({
+    geometry: new Point(transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
+  });
+  gemsArray.addFeature(iconFeature);
+}
 
+//----------LOAD VIEWPOINTS-------------
+function loadView(event) {
+  $.ajax({
+    url: 'http://localhost:3000/w_viewpoint',
+    type: 'GET',
+    success: function (res) {
+      for (var i in res) {
+        //console.log(res[i].lon);
+        addViewMarker(res[i].lon, res[i].lat);
+      }
+    }
+  });
+}
+var noView = true;
+function showHideView() {
+  if (noView) {
+    loadView();
+  }
+  else viewPointsArray.clear()
+  noView = !noView;
+}
+//Triggers showHidesmallTrail function
+var triggView = document.getElementById("viewpoints");
+triggView.addEventListener("click", showHideView);
+
+function addViewMarker(lon, lat) {
+  var iconFeature = new Feature({
+    geometry: new Point(transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
+  });
+  viewPointsArray.addFeature(iconFeature);
+}
+
+//----------LOAD Bathingsite-------------
+function loadBathMade(event) {
+  $.ajax({
+    url: 'http://localhost:3000/w_bathmade',
+    type: 'GET',
+    success: function (res) {
+      for (var i in res) {
+        //console.log(res[i].lon);
+        addBathMadeMarker(res[i].lon, res[i].lat);
+      }
+    }
+  });
+}
+var noBathMade = true;
+function showHideBathMade() {
+  if (noBathMade) {
+    loadBathMade();
+  }
+  else bathingSiteArray.clear()
+  noBathMade = !noBathMade;
+}
+//Triggers showHidesmallTrail function
+var triggBathMade = document.getElementById("bathingsites");
+triggBathMade.addEventListener("click", showHideBathMade);
+
+function addBathMadeMarker(lon, lat) {
+  var iconFeature = new Feature({
+    geometry: new Point(transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
+  });
+  bathingSiteArray.addFeature(iconFeature);
+}
+
+//----------LOAD Bathingsite Natural-------------
+function loadBathNat(event) {
+  $.ajax({
+    url: 'http://localhost:3000/w_bathnatural',
+    type: 'GET',
+    success: function (res) {
+      for (var i in res) {
+        //console.log(res[i].lon);
+        addBathNaturalMarker(res[i].lon, res[i].lat);
+      }
+    }
+  });
+}
+var noBathNatural = true;
+function showHideBathNatural() {
+  if (noBathNatural) {
+    loadBathNat();
+  }
+  else naturalBathingSiteArray.clear()
+  noBathNatural = !noBathNatural;
+}
+//Triggers showHidesmallTrail function
+var triggBathNat = document.getElementById("naturalbath");
+triggBathNat.addEventListener("click", showHideBathNatural);
+
+function addBathNaturalMarker(lon, lat) {
+  var iconFeature = new Feature({
+    geometry: new Point(transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
+  });
+  naturalBathingSiteArray.addFeature(iconFeature);
+}
 
 
 //--------------------------------------------------------------------FUNCTION FOR VIEW LAYER AND FIND-------------------------------------------------------------//
