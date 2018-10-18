@@ -632,241 +632,313 @@ function createMyPosition() {
 
 //-------------------------------------------------------------------- FUNCTIONS FOR FIND
 //Declaring global variables and default values
-//var findFromPos = false;
-//var findFromPoint = true;
-//var findFromTrail = false;
-var latitude = "18.160513";
-var longitude = "59.289951";
-var clickcoordinate = [18.160513, 59.289951];
-var urlend = "/w_bathmade";
-var target = "point";
+var findFromPos;
+var findFromPoint;
+var findFromTrail
+var latitude;
+var longitude;
+var clickcoordinate = [18.160513, 59.289951]; //Default clicked position is Hellasgården, if a search is performed without clicking the map
+var target;
 var table;
-var distance = "1";
+var table2;
+var distance;
 
+//Declearing variables with a click event listener to start a search and to clear a search
 var searchclickpoint = document.getElementById("StartSearch");
-searchclickpoint.addEventListener("click", function () { findpoints() });
+searchclickpoint.addEventListener("click", function () { find() });
+var clearSearch = document.getElementById("ClearSearch");
+clearSearch.addEventListener("click", function () { clearsearch() });
 
-
+//Defines a function to get the oordinates, as clickcoordinate, from the map by single clicking a position in the map
 map.on('singleclick', function (evt) {
-  clickcoordinate = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'); //map.getEventCoordinate(evt.originalEvent)
+  clickcoordinate = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 });
 
-function findpoints() {
+//Function to clear the serch result by clearing those features
+function clearsearch() {
+  searchResultArray.clear();
+  searchTrailArray.clear();
+}
 
+//Function that handles all searches, callaed by clicking the search button
+function find() {
+  //If statements to check from where the search is performed
   if ($("input[name='SearchInit']:checked").val() == "fromGPSlocation") {
-    var findFromPos = true;
-    var findFromPoint = false;
-    var findFromTrail = false;
+    findFromPos = true;
+    findFromPoint = false;
+    findFromTrail = false;
   }
   else if ($("input[name='SearchInit']:checked").val() == "fromClick") {
-    var findFromPos = false;
-    var findFromPoint = true;
-    var findFromTrail = false;
+    findFromPos = false;
+    findFromPoint = true;
+    findFromTrail = false;
   }
-  /* Inte implementerat ännu
   else if ($("input[name='SearchInit']:checked").val() == "fromTrail") {
     findFromPos = false;
     findFromPoint = false;
     findFromTrail = true;
-}*/
+  }
+
+  //If statements to check what is searched for, point or line and table name
   if ($("input[name='SearchChoice']:checked").val() == "bathSite") {
-    urlend = "/findpoint";
     target = "point";
     table = "w_bathmade";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "NaturBathSite") {
-    urlend = "/findpoint";
     target = "point";
     table = "w_bathnatural";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "View") {
-    urlend = "/findpoint";
     target = "point";
     table = "w_viewpoint";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Gems") {
-    urlend = "/findpoint";
     target = "point";
     table = "w_nicespots";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "LargeTrail") {
-    urlend = "/findline";
     target = "line";
     table = "w_pathbig";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "Trail") {
-    urlend = "/findline";
     target = "line";
     table = "w_pathsmall";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "SmallTrail") {
-    urlend = "/findline";
     target = "line";
     table = "w_pathnondistinct";
-    distance = document.getElementById("dist").value
   }
   else if ($("input[name='SearchChoice']:checked").val() == "GreenTrail") {
-    urlend = "/findline";
     target = "line";
     table = "w_trailgreen";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "RedTrail") {
-    urlend = "/findline";
     target = "line";
     table = "w_trailhellas5";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "BlueTrail") {
-    urlend = "/findline";
     target = "line";
     table = "w_traillake";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "PurpleTrail") {
-    urlend = "/findline";
     target = "line";
     table = "w_trailwhite";
   }
   else if ($("input[name='SearchChoice']:checked").val() == "DetailedRoads") {
-    urlend = "/findline";
     target = "line";
     table = "w_road";
   }
-  console.log(table, longitude, latitude, distance)
-  $.ajax({
-    url: 'http://localhost:3000' + urlend,
-    type: "POST",
-    cache: false,
-    contentType: "application/json",
-    data: JSON.stringify({ //req body
-      table: table,
-      longitude: longitude, 
-      latitude: latitude,
-      distance: distance
-    }),
-    success: function (res) {
-      console.log(findFromPos, findFromPoint, findFromTrail, target, urlend);
-      console.log(res);
-      if (findFromPos) {
-        console.log('find from position');
 
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(success, error);
-          function success(position) {
-            latitude = position.coords.latitude;
-            longitude = position.coords.longitude;
-            if (target === "point") {
-              createfoundpoints(latitude, longitude, "myPos");
-            }
-            else if (target === "line") {
-              createfoundlines(latitude, longitude, "myPos");
-            }
-          }
-          function error() {
-            //Does nothing
-          }
-        }
-
-
-      }
-      else if (findFromPoint) {
+  //If Statements to handle the search if it is performed from the device pos, a clicked point or a marked line
+  //Searching from my current position
+  if (findFromPos) {
+    console.log('find from position');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+      function success(position) {
+        //Extracting the position from geolocation as latitude and longitude
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        //Calling a function to handle search for either line or point features from the extracted position
+        //"myPos" is passed to place the position marker of the search from position in the correct feature
         if (target === "point") {
-          console.log('find from point');
-          latitude = clickcoordinate[1];
-          longitude = clickcoordinate[0];
-          console.log(latitude, longitude)
-          createfoundpoints(latitude, longitude, "clickedArray");
+          createfoundpoints(latitude, longitude, "myPos");
         }
         else if (target === "line") {
-          //Do something
-
+          createfoundlines(latitude, longitude, "myPos");
         }
-
       }
-
-      //Not working yet
-      else if (findFromTrail) {
-        console.log('find from trail');
-        //Do something
+      function error() {
       }
-
-      function createfoundpoints(latitude, longitude, fromArray) {
-        searchResultArray.clear();
+    }
+  }
+  //If searching from a clicked point
+  else if (findFromPoint) {
+    console.log('find from point');
+    //Extracting the latitue and longitude from the clicked position
+    latitude = clickcoordinate[1];
+    longitude = clickcoordinate[0];
+    console.log(latitude, longitude)
+    //Calling a function to handle search for either line or point features from the extracted point
+    //"clickedArray" is passed to place the position marker of the search from position in the correct feature
+    if (target === "point") {
+      createfoundpoints(latitude, longitude, "clickedArray");
+    }
+    else if (target === "line") {
+      createfoundlines(latitude, longitude, "clickedArray");
+    }
+  }
+  //If searching from a marked trail
+  else if (findFromTrail) {
+    console.log('find from trail');
+    //Get table name from clicked line! NOT WORKING YET, JUST HARD CODING THE RED TRAIL
+    table2 = "w_trailhellas5"
+    //Calling a function to handle search for either line or point features from the line feature table extracted
+    if (target === "point") {
+      createfoundpointsfromline(table2);
+    }
+    else if (target === "line") {
+      createfoundlinesfromline(table2);
+    }
+  }
+  //function that query and create search points from a point
+  function createfoundpoints(latitude, longitude, fromArray) {
+    //Extracts the search distance from the input box
+    distance = document.getElementById("dist").value
+    console.log(table, longitude, latitude, distance)
+    //Ajax call to server
+    $.ajax({
+      url: 'http://localhost:3000/findpointfrompoint',
+      type: "POST",
+      cache: false,
+      contentType: "application/json",
+      //Passes table, search from position and distance as req.body parameters
+      data: JSON.stringify({
+        table: table,
+        longitude: longitude,
+        latitude: latitude,
+        distance: distance
+      }),
+      success: function (res) {
+        console.log(findFromPos, findFromPoint, findFromTrail, target);
+        console.log(res);
+        //Clear previous search position markers and adds a new in the correct feature (fromArray)
         clickedArray.clear();
         positionArray.clear();
         addPositionMarker(longitude, latitude, fromArray);
+        //Loops the rows of the query result and adds positions markers
         for (var i in res) {
           console.log(latitude, longitude, res[i].latitude, res[i].longitude);
-          //console.log(distance(latitude, longitude, res[i].lat, res[i].lon, "K"));
-          if (distance(latitude, longitude, res[i].latitude, res[i].longitude, "K") < document.getElementById("dist").value) {
-            //Point within distance! Yeey
-            console.log('Point within distance Yeey!');
-            addPositionMarker(res[i].longitude, res[i].latitude, "searchResult");
-          }
+          console.log('Point within distance Yeey!');
+          addPositionMarker(res[i].longitude, res[i].latitude, "searchResult");
         }
-        //console.log(lat, lon);
+        //Sets the view to the search from position
         map.setView(new View({
           center: fromLonLat([longitude, latitude]),
-          zoom: 12
+          zoom: 13
         }))
       }
-      function createfoundlines(latitude, longitude, fromArray) {
-        searchResultArray.clear();
+    })
+  }
+  //function that query and create search lines from a point
+  function createfoundlines(latitude, longitude, fromArray) {
+    //Extracts the search distance from the input box
+    distance = document.getElementById("dist").value
+    console.log(table, longitude, latitude, distance)
+    //Ajax call to server
+    $.ajax({
+      url: 'http://localhost:3000/findlinefrompoint',
+      type: "POST",
+      cache: false,
+      contentType: "application/json",
+      //Passes table, search from position and distance as req.body parameters
+      data: JSON.stringify({
+        table: table,
+        longitude: longitude,
+        latitude: latitude,
+        distance: distance
+      }),
+      success: function (res) {
+        console.log(findFromPos, findFromPoint, findFromTrail, target);
+        console.log(res);
+        //Clear previous search position markers and adds a new in the correct feature (fromArray)
         clickedArray.clear();
         positionArray.clear();
         addPositionMarker(longitude, latitude, fromArray);
+        //Passes the rows to a parsing function and ads the line features as new features in the searchTrailArray vector source
         var list_Feat = jsonAnswerDataToListElements(res);
         var line_data = {
           "type": "FeatureCollection",
-          //"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
           "features": list_Feat
         }
         searchTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, { featureProjection: 'EPSG: 3857' }))
-        /*console.log(positionArray.features);
-        console.log(positionArray.geometry, line_data.features[1].geometry.distanceTo(pointFeature.geometry), document.getElementById("dist").value);
-        for (var i = 1; i <= line_data.features.length - 1; i++) {
-          if (line_data.features[i].geometry.distanceTo(pointFeature.geometry) < document.getElementById("dist").value) {
-            largeTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, {featureProjection: 'EPSG: 3857' }));
-            console.log("Test!" + largeTrail);
-            break
-          }
-        }*/
+        //Sets the view to the search from position
         map.setView(new View({
           center: fromLonLat([longitude, latitude]),
-          zoom: 14
+          zoom: 13
         }))
       }
+    })
+  }
+  //function that query and create search points from a line
+  function createfoundpointsfromline(table2) {
+    //Extracts the search distance from the input box
+    distance = document.getElementById("dist").value
+    console.log(table, table2, distance)
+    //Ajax call to server
+    $.ajax({
+      url: 'http://localhost:3000/findpointfromline',
+      type: "POST",
+      cache: false,
+      contentType: "application/json",
+      //Passes tables and distance as req.body parameters
+      data: JSON.stringify({
+        table1: table,
+        table2: table2,
+        distance: distance
+      }),
+      success: function (res) {
+        console.log(findFromPos, findFromPoint, findFromTrail, target);
+        console.log(res);
+        //Clear previous search position markers
+        clickedArray.clear();
+        positionArray.clear();
+        //Loops the rows of the query result and adds positions markers
+        for (var i in res) {
+          console.log(latitude, longitude, res[i].latitude, res[i].longitude);
+          console.log('Point within distance Yeey!');
+          addPositionMarker(res[i].longitude, res[i].latitude, "searchResult");
+        }
+        /*
+        map.setView(new View({
+          center: fromLonLat([res[1].longitude, res[1].latitude]),
+          zoom: 13
+        }))
+        */
+      }
+    })
+  }
+  //function that query and create search lines from a line
+  function createfoundlinesfromline(table2) {
+    //Extracts the search distance from the input box
+    distance = document.getElementById("dist").value
+    console.log(table, table2, distance)
+    //Ajax call to server
+    $.ajax({
+      url: 'http://localhost:3000/findlinefromline',
+      type: "POST",
+      cache: false,
+      contentType: "application/json",
+      //Passes tables and distance as req.body parameters
+      data: JSON.stringify({ //req body
+        table1: table,
+        table2: table2,
+        distance: distance
+      }),
+      success: function (res) {
+        console.log(findFromPos, findFromPoint, findFromTrail, target);
+        console.log(res);
+        //Clear previous search position markers
+        clickedArray.clear();
+        positionArray.clear();
+        //Passes the rows to a parsing function and ads the line features as new features in the searchTrailArray vector source
+        var list_Feat = jsonAnswerDataToListElements(res);
+        var line_data = {
+          "type": "FeatureCollection",
+          "features": list_Feat
+        }
+        searchTrailArray.addFeatures(new ol.format.GeoJSON().readFeatures(line_data, { featureProjection: 'EPSG: 3857' }))
+        /*
+        map.setView(new View({
+          center: fromLonLat([longitude, latitude]),
+          zoom: 13
+        }))
+        */
+      }
+    })
+  }
+}
 
-    }
-  });
-}
-function distance(lat1, lon1, lat2, lon2, unit) {
-  //console.log(lat1);
-  var radlat1 = Math.PI * lat1 / 180;
-  var radlat2 = Math.PI * lat2 / 180;
-  var theta = lon1 - lon2;
-  var radtheta = Math.PI * theta / 180;
-  var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-  //console.log(dist);
-  if (dist > 1) {
-    dist = 1;
-  }
-  dist = Math.acos(dist);
-  dist = dist * 180 / Math.PI;
-  dist = dist * 60 * 1.1515;
-  if (unit == "K") { dist = dist * 1.609344 };
-  if (unit == "N") { dist = dist * 0.8684 };
-  return dist
-}
-function jsonAnswerDataToListElements(json_answer) {
-  var data = json_answer;
-  var n = data.length;
-  var r = []
-  for (var i = 0; i < n; ++i) {
-    var row = data[i];
-    var geomJson = $.parseJSON(row.st_asgeojson);
-    r.push(geomJson);
-  }
-  return r;
-}
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //----VIEW LAYERS--------------------
 // LOAD SMALL TRAILS-------------------------------
@@ -1109,8 +1181,19 @@ triggPurpleTrails.addEventListener("click", showHidePurpleTrails);
 
 
 
-//--------------------------------------------------------------------FUNCTION FOR VIEW LAYER-------------------------------------------------------------//
-
+//--------------------------------------------------------------------FUNCTION FOR VIEW LAYER AND FIND-------------------------------------------------------------//
+//Function that parses the linedata rows from the query result
+function jsonAnswerDataToListElements(json_answer) {
+  var data = json_answer;
+  var n = data.length;
+  var r = []
+  for (var i = 0; i < n; ++i) {
+    var row = data[i];
+    var geomJson = $.parseJSON(row.st_asgeojson);
+    r.push(geomJson);
+  }
+  return r;
+}
 
 //-------------------------------------------------------------------- FUNCTIONS FOR SIGN OUT USER
 //Signs out the current user

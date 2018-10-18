@@ -96,38 +96,38 @@ app.post('/create', (req, res) => { //req = from ajax,
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- LAYER & FIND
-//TEST - KAN RADERAS NÄR KLAR - Gets point data from test_wgs84_point
-app.get('/test_wgs84_point', (req, res) => {
-  pool.query('SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "test_wgs84_point"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-//TEST - KAN RADERAS NÄR KLAR - Gets line data as GeoJson from test_wgs84_line
-app.get('/test_wgs84_line', (req, res) => {
-  pool.query('SELECT ST_AsGeoJSON(ST_Transform(geom, 3857)) FROM "test_wgs84_linje"', (err, dbResponse) => {
-    if (err) console.log(err);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(dbResponse.rows); //send res as a response to client
-  });
-});
-
-
-
-//Gets line data from database
-app.post('/findline', (req, res) => {
+//Gets line data from database, searched from point
+app.post('/findlinefrompoint', (req, res) => {
   console.log(req.body)
-  pool.query(`SELECT ST_AsGeoJSON(st_transform(geom, 3857)) FROM "${req.body.table}" WHERE ST_Distance(st_transform(geom, 4326), st_setsrid(ST_MakePoint('${req.body.longitude}', '${req.body.latitude}'), 4326)) < '${req.body.distance}'`, (err, dbResponse) => {
+  pool.query(`SELECT ST_AsGeoJSON(st_transform(geom, 3857)) FROM "${req.body.table}" WHERE ST_Distance(st_transform(geom, 4326)::geography, st_setsrid(ST_MakePoint('${req.body.longitude}', '${req.body.latitude}'), 4326)::geography) < '${req.body.distance}'`, (err, dbResponse) => {
     console.log("Database line");
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dbResponse.rows); //send res as a response to client
   });
 });
-//Gets point data from database
-app.post('/findpoint', (req, res) => {
-  pool.query(`SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "${req.body.table}"`, (err, dbResponse) => {
+//Gets point data from database, searched from point
+app.post('/findpointfrompoint', (req, res) => {
+  pool.query(`SELECT ST_X(ST_Transform(geom, 4326)) AS "longitude", ST_Y(ST_Transform(geom, 4326)) AS "latitude" FROM "${req.body.table}" WHERE ST_Distance(st_transform(geom, 4326)::geography, st_setsrid(ST_MakePoint('${req.body.longitude}', '${req.body.latitude}'), 4326)::geography) < '${req.body.distance}'`, (err, dbResponse) => {
+    console.log("Database point");
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets line data from database, searched from line
+app.post('/findlinefromline', (req, res) => {
+  console.log(req.body)
+  pool.query(`SELECT ST_AsGeoJSON(st_transform(a.geom, 3857)) FROM "${req.body.table1}" a, "${req.body.table2}" b WHERE ST_Distance(st_transform(a.geom, 4326)::geography, st_transform(b.geom, 4326)::geography) < '${req.body.distance}'`, (err, dbResponse) => {
+    console.log("Database line");
+    if (err) console.log(err);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(dbResponse.rows); //send res as a response to client
+  });
+});
+//Gets point data from database, searched from line
+app.post('/findpointfromline', (req, res) => {
+  pool.query(`SELECT ST_X(ST_Transform(a.geom, 4326)) AS "longitude", ST_Y(ST_Transform(a.geom, 4326)) AS "latitude" FROM "${req.body.table1}" a, "${req.body.table2}" b WHERE ST_Distance(st_transform(a.geom, 4326)::geography, st_transform(b.geom, 4326)::geography) < '${req.body.distance}'`, (err, dbResponse) => {
     console.log("Database point");
     if (err) console.log(err);
     res.setHeader('Access-Control-Allow-Origin', '*');
