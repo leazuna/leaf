@@ -339,6 +339,7 @@ var smallTrail = new VectorLayer({
 var greenTrailArray = new VectorSource({});
 //Creates a vector layer for the create line
 var greenTrail = new VectorLayer({
+  id: 'greenTrail',
   source: greenTrailArray,
   style: greenTrailStyle
 });
@@ -346,6 +347,7 @@ var greenTrail = new VectorLayer({
 var redTrailArray = new VectorSource({});
 //Creates a vector layer for the create line
 var redTrail = new VectorLayer({
+  id: 'redTrail',
   source: redTrailArray,
   style: redTrailStyle
 });
@@ -353,6 +355,7 @@ var redTrail = new VectorLayer({
 var blueTrailArray = new VectorSource({});
 //Creates a vector layer for the create line
 var blueTrail = new VectorLayer({
+  id: 'blueTrail',
   source: blueTrailArray,
   style: blueTrailStyle
 });
@@ -360,6 +363,7 @@ var blueTrail = new VectorLayer({
 var purpleTrailArray = new VectorSource({});
 //Creates a vector layer for the create line
 var purpleTrail = new VectorLayer({
+  id: 'purpleTrail',
   source: purpleTrailArray,
   style: purpleTrailStyle
 });
@@ -550,17 +554,6 @@ map.on('click', function (evt) {
     $(element).popover('destroy');
   }
 });
-//Not used but may be used in the future - SAVE
-// // change mouse cursor when over marker
-// map.on('pointermove', function(e) {
-//   if (e.dragging) {
-//     $(element).popover('destroy');
-//     return;
-//   }
-//   var pixel = map.getEventPixel(e.originalEvent);
-//   var hit = map.hasFeatureAtPixel(pixel);
-//   //map.getTarget().style.cursor = hit ? 'pointer' : '';
-// });
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- FUNCTIONS FOR CREATE (My places)
@@ -584,15 +577,6 @@ map.on('click', function (event) {
   if (create == 'true') {
     // $(document).ready(function() {
     $("#description").modal();
-    //Not used but may be used in the future - SAVE
-    // $('#description').on('click', '.btn-primary', function(){
-    //   place = $('#place').val();
-    //   var descr = $('#descr').val();
-    //   //$(".modal-body input").val("")
-    //   //console.log(place);
-    //   //console.log(descr);
-    // $("#description.close").click()
-    // });
   }
   else { }
 });
@@ -1320,6 +1304,7 @@ function jsonAnswerDataToListElements(json_answer) {
   }
   return r;
 }
+//-------------------------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------- FUNCTIONS FOR SIGN OUT USER
 //Signs out the current user
@@ -1336,3 +1321,29 @@ var sou = document.getElementById("signoutusr");
 if (sou) {
   sou.addEventListener("click", signOutUsr, false);
 }
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------- FUNCTIONS MARK LINE IN MAP
+$( "input" ).on( "click", function() {
+  var GetRoad = document.getElementById("FindMenu");
+  var create = GetRoad.getAttribute("aria-expanded");
+  if ($("input[name='SearchInit']:checked").val() == "fromTrail" && create == 'true' ) {
+  //if ($( "input[name='SearchInit']:checked" ).val() == 'fromTrail') {
+    var select = new ol.interaction.Select({
+      layers: function (layer) {
+        return layer.get('id') == 'greenTrail', 'redTrail', 'blueTrail', 'purpleTrail'
+      }});
+    //make sure you add select interaction to map
+    map.addInteraction(select);
+    var features = select.getFeatures();
+    features.on('add', function(event) {
+      console.log(features )
+});
+    // now you have an ol.Collection of features that you can add features to
+    features.push(feature);
+    // now the pushed feature is highlighted
+    //to dehighlight, just simply remove the feature from select
+    features.remove(feature);
+  }
+ else {}
+});
