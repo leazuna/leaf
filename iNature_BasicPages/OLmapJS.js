@@ -336,7 +336,9 @@ var smallTrail = new VectorLayer({
   style: smallTrailStyle
 });
 // //Creates an vector array to store line objects in, so that it can be removed later on
-var greenTrailArray = new VectorSource({});
+var greenTrailArray = new VectorSource({
+  id: 'w_trailgreen'
+});
 //Creates a vector layer for the create line
 var greenTrail = new VectorLayer({
   id: 'greenTrail',
@@ -344,7 +346,9 @@ var greenTrail = new VectorLayer({
   style: greenTrailStyle
 });
 // //Creates an vector array to store line objects in, so that it can be removed later on
-var redTrailArray = new VectorSource({});
+var redTrailArray = new VectorSource({
+  id: 'w_trailhellas5'
+});
 //Creates a vector layer for the create line
 var redTrail = new VectorLayer({
   id: 'redTrail',
@@ -352,7 +356,9 @@ var redTrail = new VectorLayer({
   style: redTrailStyle
 });
 //Creates an vector array to store line objects in, so that it can be removed later on
-var blueTrailArray = new VectorSource({});
+var blueTrailArray = new VectorSource({
+  id: 'w_traillake'
+});
 //Creates a vector layer for the create line
 var blueTrail = new VectorLayer({
   id: 'blueTrail',
@@ -360,7 +366,9 @@ var blueTrail = new VectorLayer({
   style: blueTrailStyle
 });
 // //Creates an vector array to store line objects in, so that it can be removed later on
-var purpleTrailArray = new VectorSource({});
+var purpleTrailArray = new VectorSource({
+  id: 'w_trailwhite'
+});
 //Creates a vector layer for the create line
 var purpleTrail = new VectorLayer({
   id: 'purpleTrail',
@@ -1327,23 +1335,30 @@ if (sou) {
 $( "input" ).on( "click", function() {
   var GetRoad = document.getElementById("FindMenu");
   var create = GetRoad.getAttribute("aria-expanded");
+  var searchFromLine;
   if ($("input[name='SearchInit']:checked").val() == "fromTrail" && create == 'true' ) {
   //if ($( "input[name='SearchInit']:checked" ).val() == 'fromTrail') {
     var select = new ol.interaction.Select({
       layers: function (layer) {
+        //Skulle vilja extrahera detta id när man klickar på linjen.
         return layer.get('id') == 'greenTrail', 'redTrail', 'blueTrail', 'purpleTrail'
       }});
     //make sure you add select interaction to map
     map.addInteraction(select);
     var features = select.getFeatures();
     features.on('add', function(event) {
-      console.log(features )
+      console.log(select)
+      console.log(select.get())
+      console.log(features)
+      //Om man här tex har klickat på linjen, så skulle jag vilja sätta en variabel till det idet som du definierat.
+      searchFromLine = features.get('id');
+      console.log(searchFromLine)
 });
     // now you have an ol.Collection of features that you can add features to
-    features.push(feature);
+    //features.push(feature);
     // now the pushed feature is highlighted
     //to dehighlight, just simply remove the feature from select
-    features.remove(feature);
+    //features.remove(feature);
   }
  else {}
 });
